@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة QDU للاختبار التفاعلي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="app-container light-mode" id="app">
+    <div class="top-controls">
+      <button class="control-btn" id="themeToggle" title="تبديل الوضع" aria-label="تبديل الوضع">☀️</button>
+      <button class="control-btn" id="fullscreenToggle" title="وضع الدراسة (ملء الشاشة)" aria-label="وضع الدراسة بملء الشاشة">⛶</button>
+    </div>
+    <div id="demoBanner" class="demo-banner hidden"></div>
+    <div class="header">
+      <h1 class="platform-title" id="platformTitle">منصة QDU للاختبار التفاعلي</h1>
+      <p class="subject-name hidden" id="subjectName"></p>
+      <p class="student-credit hidden" id="authorLine">إعداد: <span id="authorName"></span></p>
+    </div>
+    <nav class="main-nav hidden" id="nav" aria-label="التنقل"></nav>
+    <div id="notices"></div>
+    <div class="content-wrapper"><main id="view" tabindex="-1"></main></div>
+  </div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="modalRoot"></div>
+  <noscript><p style="padding:20px;text-align:center">يتطلب هذا الموقع تفعيل JavaScript.</p></noscript>
+  <script src="js/util.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/tts.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

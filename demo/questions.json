@@ -1,0 +1,74 @@
+[
+  {
+    "id": "demo-l1-q1",
+    "lectureId": "demo-l1",
+    "text": "One of the following is NOT an indication for liver ultrasound:",
+    "options": [
+      "Hepatic trauma",
+      "Abnormal liver function tests",
+      "Renal colic",
+      "Focal liver lesion"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "demo-l1-q2",
+    "lectureId": "demo-l1",
+    "text": "One of the following is NOT a method of imaging the hepatobiliary system:",
+    "options": [
+      "Ultrasound",
+      "ERCP",
+      "Intravenous Urography (IVU)",
+      "Plain film"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "demo-l1-q3",
+    "lectureId": "demo-l1",
+    "text": "One of the following is an indication for liver ultrasound:",
+    "options": [
+      "Renal colic",
+      "Portal hypertension",
+      "Infertility",
+      "Testis"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "demo-l2-q1",
+    "lectureId": "demo-l2",
+    "text": "One of the following is an indication for liver CT:",
+    "options": [
+      "Renal colic",
+      "Suspected liver lesion",
+      "Infertility",
+      "Hematuria"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "demo-l2-q2",
+    "lectureId": "demo-l2",
+    "text": "One of the following is NOT an indication for liver CT:",
+    "options": [
+      "Hepatomegaly",
+      "Abnormal liver function tests",
+      "Assessment of liver vessels",
+      "Suspected renal stone"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "demo-l2-q3",
+    "lectureId": "demo-l2",
+    "text": "One of the following is an indication for liver CT:",
+    "options": [
+      "Pelvic pain",
+      "Recurrent UTI",
+      "To facilitate needle placement for biopsy",
+      "Suspected ovarian cyst"
+    ],
+    "correct": 2
+  }
+]
