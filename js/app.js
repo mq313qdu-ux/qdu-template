@@ -34,7 +34,7 @@
   function applyTheme() {
     const dark = App.state.settings.dark, app = $('#app');
     app.classList.toggle('dark-mode', dark); app.classList.toggle('light-mode', !dark);
-    $('#themeToggle').textContent = dark ? '🌙' : '☀️';
+    $('#input').checked = dark;
   }
   function toggleStudy() {
     const app = $('#app'), on = !app.classList.contains('study-mode');
@@ -182,6 +182,7 @@
   App.render = function () {
     QDU.Quiz.leave();
     const r = (App.route = parse()), view = $('#view');
+    $('#app').dataset.page = r.name;
     renderNav(r);
     if (r.name === 'quiz') { if (!QDU.Quiz.view(r.id)) { App.go('#/'); } return; }
     if (r.name === 'results') { if (!QDU.Quiz.results(r.id)) { App.go('#/history'); } return; }
@@ -198,7 +199,17 @@
     App.site = site;
     App.demo = site.allowDemo && new URLSearchParams(location.search).get('demo') === '1';
     $('#view').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b && App.actions[b.dataset.act]) { e.preventDefault(); App.actions[b.dataset.act](b); } });
-    $('#themeToggle').addEventListener('click', () => { App.state.settings.dark = !App.state.settings.dark; applyTheme(); App.save(); });
+    $('#input').addEventListener('change', (e) => { App.state.settings.dark = e.target.checked; applyTheme(); App.save(); });
+    // social links: on phones try the native app first, fall back to the web page if the app did not take over
+    document.querySelector('.site-footer').addEventListener('click', (e) => {
+      const l = e.target.closest('a[data-app]');
+      if (!l || !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return;   // desktop: normal link in a new tab
+      e.preventDefault();
+      let left = false; const onVis = () => { if (document.hidden) left = true; };
+      document.addEventListener('visibilitychange', onVis);
+      window.location.href = l.dataset.app;
+      setTimeout(() => { document.removeEventListener('visibilitychange', onVis); if (!left && !document.hidden) window.open(l.href, '_blank', 'noopener'); }, 1500);
+    });
     $('#fullscreenToggle').addEventListener('click', toggleStudy);
     document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) $('#app').classList.remove('study-mode'); });
 

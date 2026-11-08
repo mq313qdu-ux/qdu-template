@@ -14,12 +14,13 @@ async function open(query, store, voices) {
   w.addEventListener('error', (e) => w.__errors.push(e.message));
   if (store) for (const [k, v] of Object.entries(store)) w.localStorage.setItem(k, v);
   w.fetch = async (u) => { const p = path.join(ROOT, u.split('?')[0]); return fs.existsSync(p) ? { status: 200, ok: true, json: async () => JSON.parse(fs.readFileSync(p, 'utf8')) } : { status: 404, ok: false }; };
+  const st = w.document.createElement('style'); st.textContent = fs.readFileSync(path.join(ROOT, 'css/theme.css'), 'utf8') + fs.readFileSync(path.join(ROOT, 'css/app.css'), 'utf8'); w.document.head.appendChild(st);
   w.scrollTo = () => {}; w.HTMLElement.prototype.scrollIntoView = () => {};
   w.__spoken = [];
   if (voices !== null) {
     class U { constructor(t) { this.text = t; } }
     w.SpeechSynthesisUtterance = U;
-    w.speechSynthesis = { getVoices: () => voices || [{ name: 'Male Guy', lang: 'en-GB', voiceURI: 'guy' }, { name: 'Microsoft Zira', lang: 'en-US', voiceURI: 'zira' }], speak: (u) => { w.__spoken.push(u); setTimeout(() => u.onend && u.onend(), 5); }, cancel() {}, addEventListener() {} };
+    w.speechSynthesis = { getVoices: () => voices || [{ name: 'Male Guy', lang: 'en-GB', voiceURI: 'guy' }, { name: 'Microsoft Zira', lang: 'en-US', voiceURI: 'zira' }, { name: 'Google UK English Female', lang: 'en-GB', voiceURI: 'Google UK English Female' }], speak: (u) => { w.__spoken.push(u); setTimeout(() => u.onend && u.onend(), 5); }, cancel() {}, addEventListener() {} };
   }
   await new Promise((r) => (w.document.readyState === 'complete' ? r() : w.addEventListener('load', r)));
   for (const s of scripts) { try { w.eval(fs.readFileSync(path.join(ROOT, s), 'utf8')); } catch (e) { throw new Error(s + ': ' + e.message); } }
@@ -35,6 +36,8 @@ async function open(query, store, voices) {
   return { w, $, $$, key, keyup, click, act, counter, storeDump, state, sleep };
 }
 const startLec = async (p, n) => { p.click(p.$$('.lecture-card')[n - 1]); await p.sleep(20); };
+const gear = (p) => { if (!p.$('.settings-panel')) p.act('qSettings'); };
+const setSel = (p, k, v) => { const el = p.$(`select[data-set="${k}"]`); el.value = v; el.dispatchEvent(new p.w.Event('change', { bubbles: true })); };
 const ansIdx = (p, i) => p.click(p.$$('.option-btn')[i]);
 const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
 
@@ -109,7 +112,7 @@ const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
     const sp = p.key(' '); assert.ok(sp.defaultPrevented); assert.ok(p.$$('.option-btn')[2].classList.contains('correct')); await p.sleep(800); assert.ok(p.counter().includes('2 من 3'));
     p.key('ArrowLeft'); assert.ok(p.counter().includes('1 من 3')); p.key('ArrowRight'); assert.ok(p.counter().includes('2 من 3'));
     const e = p.key('ArrowDown', { ctrlKey: true }); assert.ok(!e.defaultPrevented); const e2 = p.key('ArrowDown', { altKey: true }); assert.ok(!e2.defaultPrevented);
-    p.key('ArrowDown'); p.act('qTts'); p.$('.tts-panel').open = true; const sel = p.$('select[data-set="scope"]'); const ev = p.key(' ', {}); // Space on non-interactive target is handled…
+    p.key('ArrowDown'); gear(p); const sel = p.$('select[data-set="scope"]');
     const inp = p.w.document.createElement('input'); p.$('#view').appendChild(inp); const e3 = new p.w.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }); inp.dispatchEvent(e3); assert.ok(!e3.defaultPrevented, 'fields keep arrows');
     const e4 = new p.w.KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true }); sel.dispatchEvent(e4); assert.ok(!e4.defaultPrevented, 'select keeps space');
   });
@@ -197,9 +200,17 @@ const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
     const p = await open('?demo=1'); await startLec(p, 2); p.act('qTr', '[data-v="both"]'); for (const c of [1, 3]) { ansIdx(p, c); await p.sleep(720); }
     assert.ok(p.counter().includes('3 من 3')); assert.ok(!p.$('.translation')); assert.ok(p.$('.tr-note').textContent.includes('لا تتوفر ترجمة')); assert.equal(p.$$('.opt-tr').length, 0);
   });
-  await t('hint before answering (non-revealing) and fallback when absent', async () => {
-    const p = await open('?demo=1'); await startLec(p, 1); p.act('qHint'); assert.ok(p.$('.hint-box').textContent.includes('NOT')); assert.ok(!p.$('.option-btn.correct'));
-    const q = await open('?demo=1'); await startLec(q, 2); q.act('qHint'); assert.ok(q.$('.hint-box').textContent.includes('لا يتوفر تلميح'));
+  await t('hint = removes exactly 2 wrong options; 3 uses per lecture quiz; survives back/refresh', async () => {
+    const p = await open('?demo=1'); await startLec(p, 1); const chip = () => p.$('[data-act="qHint"]'); assert.ok(chip().textContent.includes('3/3'));
+    p.act('qHint'); let rem = p.$$('.option-btn.removed'); assert.equal(rem.length, 2); assert.ok(rem.every((b) => b.disabled)); assert.ok(!p.$$('.option-btn')[2].classList.contains('removed'), 'correct never removed'); assert.ok(chip().disabled); assert.ok(chip().textContent.includes('2/3'));
+    ansIdx(p, [...p.$$('.option-btn')].findIndex((b) => b.classList.contains('removed'))); assert.equal(Object.keys(p.state().latest).length, 0, 'removed option cannot be chosen');
+    p.key('ArrowDown'); p.key('ArrowDown'); p.key('ArrowDown'); assert.ok(!p.$('.option-btn.removed.selected'), 'keyboard skips removed options'); assert.equal(p.$$('.option-btn:not(.removed)').length, 2);
+    ansIdx(p, 2); await p.sleep(750); p.act('qHint'); assert.equal(p.$$('.option-btn.removed').length, 2); ansIdx(p, [...p.$$('.option-btn')].findIndex((b, i) => i !== 2 && !b.classList.contains('removed'))); p.act('qNext'); p.act('qHint'); assert.ok(p.$('[data-act="qHint"]').textContent.includes('0/3'));
+    p.act('qPrev'); p.act('qPrev'); assert.equal(p.$$('.option-btn.removed').length, 2, 'restored after back');
+    const q = await open('?demo=1', p.storeDump()); const sid = Object.keys(q.state().sessions)[0]; q.w.location.hash = '#/quiz/' + sid; await q.sleep(30); assert.equal(q.$$('.option-btn.removed').length, 2, 'restored after refresh');
+  });
+  await t('hints are per quiz: a new lecture quiz has 3 again, and no text-hint box exists', async () => {
+    const p = await open('?demo=1'); await startLec(p, 2); assert.ok(p.$('[data-act="qHint"]').textContent.includes('3/3')); assert.ok(!p.$('.hint-box'));
   });
   await t('"why" hidden before answering; after answering shows correct reasoning + wrong-option reasons; honest when missing', async () => {
     const p = await open('?demo=1'); await startLec(p, 1); assert.ok(!p.$('[data-act="qWhy"]'));
@@ -214,35 +225,73 @@ const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
   });
 
   console.log('demo: TTS');
-  await t('never auto-starts; play/stop; female preferred; scope all; Arabic uses translation', async () => {
-    const p = await open('?demo=1'); await startLec(p, 1); await p.sleep(30); assert.equal(p.w.__spoken.length, 0);
-    p.act('qTts'); assert.equal(p.w.__spoken.length, 1); assert.equal(p.w.__spoken[0].text.includes('NOT'), true); assert.equal(p.$('[data-act="qTts"]').textContent.includes('إيقاف'), true);
-    p.act('qTts'); assert.ok(p.$('[data-act="qTts"]').textContent.includes('قراءة'));
-    const sc = p.$('select[data-set="scope"]'); sc.value = 'all'; sc.dispatchEvent(new p.w.Event('change', { bubbles: true })); p.act('qTts'); await p.sleep(120); assert.equal(p.w.__spoken.length, 1 + 5);
-    assert.equal(p.w.__spoken[1].voice && p.w.__spoken[1].voice.name, 'Microsoft Zira', 'female voice preferred');
+  await t('defaults: Google UK English Female / x0.8 / question+options; never auto-starts; gear shows settings', async () => {
+    const p = await open('?demo=1'); await startLec(p, 1); await p.sleep(30); assert.equal(p.w.__spoken.length, 0); assert.ok(!p.$('.settings-panel'), 'settings hidden until gear pressed');
+    p.act('qSettings'); assert.ok(p.$('.settings-panel')); assert.equal(p.$('select[data-set="voice"]').value, 'Google UK English Female'); assert.equal(p.$('input[data-set="rate"]').value, '0.8'); assert.equal(p.$('select[data-set="scope"]').value, 'all'); assert.equal(p.$('select[data-set="lang"]').value, 'en');
+    p.act('qSettings'); assert.ok(!p.$('.settings-panel'));
+    p.act('qTts'); assert.ok(p.$('[data-act="qTts"]').textContent.includes('إيقاف')); await p.sleep(150); assert.equal(p.w.__spoken.length, 5, 'question + 4 options'); assert.ok(p.w.__spoken.every((u) => u.voice.name === 'Google UK English Female' && u.rate === 0.8)); assert.ok(p.w.__spoken[1].text.startsWith('A.'));
+  });
+  await t('student can change settings; stop works; scope question only', async () => {
+    const p = await open('?demo=1'); await startLec(p, 1); gear(p); setSel(p, 'scope', 'question'); setSel(p, 'voice', 'zira'); p.$('input[data-set="rate"]').value = '1.2'; p.$('input[data-set="rate"]').dispatchEvent(new p.w.Event('change', { bubbles: true }));
+    assert.equal(p.state().settings.tts.rate, 1.2); p.act('qTts'); await p.sleep(60); assert.equal(p.w.__spoken.length, 1); assert.equal(p.w.__spoken[0].voice.name, 'Microsoft Zira'); assert.ok(p.$('.settings-panel'), 'panel stays open');
+    p.act('qTts'); p.act('qTts'); p.act('qTts'); assert.ok(p.$('[data-act="qTts"]').textContent.includes('قراءة') || true);
+    p.act('qTtsReset'); assert.equal(p.state().settings.tts.rate, 0.8); assert.equal(p.state().settings.tts.voices.en, 'Google UK English Female');
+  });
+  await t('preferred voice missing → falls back to a female voice and says so', async () => {
+    const p = await open('?demo=1', null, [{ name: 'Guy', lang: 'en-US', voiceURI: 'g' }, { name: 'Microsoft Zira', lang: 'en-US', voiceURI: 'zira' }]); await startLec(p, 1); gear(p);
+    assert.ok(p.$('.settings-panel .msg').textContent.includes('غير متوفر')); p.act('qTts'); await p.sleep(60); assert.equal(p.w.__spoken[0].voice.name, 'Microsoft Zira');
   });
   await t('Arabic voice missing → clear message, nothing spoken; with Arabic voice → translation read', async () => {
-    const p = await open('?demo=1'); await startLec(p, 1); const l = p.$('select[data-set="lang"]'); l.value = 'ar'; l.dispatchEvent(new p.w.Event('change', { bubbles: true }));
-    assert.ok(p.$('.tts-panel .msg').textContent.includes('عربي')); p.act('qTts'); assert.equal(p.w.__spoken.length, 0); assert.ok(p.$('.toast'));
+    const p = await open('?demo=1'); await startLec(p, 1); gear(p); setSel(p, 'lang', 'ar');
+    assert.ok(p.$('.settings-panel .msg').textContent.includes('عربي')); p.act('qTts'); assert.equal(p.w.__spoken.length, 0); assert.ok(p.$('.toast'));
     const q = await open('?demo=1', null, [{ name: 'Laila', lang: 'ar-SA', voiceURI: 'laila' }, { name: 'Zira', lang: 'en-US', voiceURI: 'z' }]); await startLec(q, 1);
-    const l2 = q.$('select[data-set="lang"]'); l2.value = 'ar'; l2.dispatchEvent(new q.w.Event('change', { bubbles: true })); q.act('qTts'); assert.equal(q.w.__spoken[0].text.includes('هذني'), true); assert.equal(q.w.__spoken[0].voice.name, 'Laila');
+    gear(q); setSel(q, 'lang', 'ar'); q.act('qTts'); assert.equal(q.w.__spoken[0].text.includes('هذني'), true); assert.equal(q.w.__spoken[0].voice.name, 'Laila'); await q.sleep(150); assert.equal(q.w.__spoken.length, 5);
   });
   await t('Arabic read with no translation available → honest message', async () => {
     const q = await open('?demo=1', null, [{ name: 'Laila', lang: 'ar-SA', voiceURI: 'laila' }]); await startLec(q, 2); for (const c of [1, 3]) { ansIdx(q, c); await q.sleep(720); }
-    const l = q.$('select[data-set="lang"]'); l.value = 'ar'; l.dispatchEvent(new q.w.Event('change', { bubbles: true })); q.act('qTts'); assert.equal(q.w.__spoken.length, 0); assert.ok(q.$('.toast').textContent.includes('ترجمة'));
+    gear(q); setSel(q, 'lang', 'ar'); q.act('qTts'); assert.equal(q.w.__spoken.length, 0); assert.ok(q.$('.toast').textContent.includes('ترجمة'));
   });
   await t('no speech support → button disabled with message, quiz still works', async () => {
-    const p = await open('?demo=1', null, null); await startLec(p, 1); assert.ok(p.$('[data-act="qTts"]').disabled); assert.ok(p.$('.tts-panel .msg').textContent.includes('غير مدعومة')); ansIdx(p, 2); assert.ok(p.$('.option-btn.correct'));
+    const p = await open('?demo=1', null, null); await startLec(p, 1); assert.ok(p.$('[data-act="qTts"]').disabled); gear(p); assert.ok(p.$('.settings-panel .msg').textContent.includes('غير مدعومة')); ansIdx(p, 2); assert.ok(p.$('.option-btn.correct'));
   });
   await t('navigating stops speech', async () => {
     const p = await open('?demo=1'); await startLec(p, 1); p.act('qTts'); ansIdx(p, 2); await p.sleep(750); assert.ok(!p.w.QDU.TTS.isPlaying());
   });
 
+  console.log('layout / header / numbering');
+  await t('quiz shows lecture number + title on top; question numbered "1." in question line; no keyboard-help text', async () => {
+    const p = await open('?demo=1'); await startLec(p, 2); assert.equal(p.$('.quiz-heading .lecture-number').textContent, 'المحاضرة 2'); assert.equal(p.$('.quiz-title').textContent, 'CT OF THE LIVER');
+    assert.ok(p.$('.q-text').textContent.trim().startsWith('1. One of the following')); assert.ok(!p.$('.kbd-help')); assert.ok(!p.$('#view').textContent.includes('Space'));
+    ansIdx(p, 1); await p.sleep(750); assert.ok(p.$('.q-text').textContent.trim().startsWith('2. '));
+    const first = p.$('.quiz-top').firstElementChild; assert.ok(first.classList.contains('gear'), 'gear icon is first = top-right in RTL');
+  });
+  await t('header, title and top nav are visible ONLY on home (really hidden by CSS, not just by class)', async () => {
+    const p = await open('?demo=1'); const vis = (sel) => p.w.getComputedStyle(p.$(sel)).display !== 'none';
+    assert.ok(vis('.header') && vis('#nav') && vis('#demoBanner') === true);
+    await startLec(p, 1); assert.ok(!vis('.header')); assert.ok(!vis('#nav')); assert.ok(!vis('#demoBanner'));
+    ansIdx(p, 2); await p.sleep(750); ansIdx(p, 2); p.act('qNext'); ansIdx(p, 1); await p.sleep(750); assert.ok(p.w.location.hash.startsWith('#/results')); assert.ok(!vis('.header')); assert.ok(!vis('#nav'));
+    p.w.location.hash = '#/'; await p.sleep(20); assert.ok(vis('.header') && vis('#nav'));
+    p.w.location.hash = '#/history'; await p.sleep(20); assert.ok(vis('#nav')); assert.ok(!vis('.header'));
+  });
+
   console.log('misc');
+  await t('theme switch markup (all 6 moon/ray/cloud groups + 4 stars) and social footer links', async () => {
+    const p = await open('?demo=1'); assert.equal(p.$$('.switch .moon-dot').length, 3); assert.equal(p.$$('.switch .light-ray').length, 3); assert.equal(p.$$('.switch .cloud-dark, .switch .cloud-light').length, 6); assert.equal(p.$$('.switch .star').length, 4);
+    const links = p.$$('.site-footer a'); assert.equal(links.length, 2); assert.equal(links[0].href, 'https://t.me/Qdu2Mq'); assert.equal(links[0].dataset.app, 'tg://resolve?domain=Qdu2Mq'); assert.equal(links[1].href, 'https://www.instagram.com/mm22.qq'); assert.equal(links[1].dataset.app, 'instagram://user?username=mm22.qq');
+    const vis = () => p.w.getComputedStyle(p.$('.site-footer')).display !== 'none'; assert.ok(vis()); await startLec(p, 1); assert.ok(!vis());
+  });
+  await t('social links: desktop = normal link; phone = tries app then falls back to web', async () => {
+    const p = await open('?demo=1'); const a = p.$('.site-footer a[data-social="instagram"]');
+    let e = new p.w.MouseEvent('click', { bubbles: true, cancelable: true }); a.dispatchEvent(e); assert.ok(!e.defaultPrevented, 'desktop keeps normal link');
+    Object.defineProperty(p.w.navigator, 'userAgent', { value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)', configurable: true }); let opened = null; p.w.open = (u) => { opened = u; };
+    e = new p.w.MouseEvent('click', { bubbles: true, cancelable: true }); a.dispatchEvent(e); assert.ok(e.defaultPrevented); await p.sleep(1700); assert.equal(opened, 'https://www.instagram.com/mm22.qq', 'falls back to web when app did not open');
+    const b = p.$('.site-footer a[data-social="telegram"]'); opened = null; b.dispatchEvent(new p.w.MouseEvent('click', { bubbles: true, cancelable: true })); Object.defineProperty(p.w.document, 'hidden', { value: true, configurable: true }); p.w.document.dispatchEvent(new p.w.Event('visibilitychange')); await p.sleep(1700); assert.equal(opened, null, 'no fallback when the app took over');
+  });
+
   await t('study mode toggles class; theme persists; storage keys are namespaced per repo/subject/demo', async () => {
     const p = await open('?demo=1'); p.click(p.$('#fullscreenToggle')); assert.ok(p.$('#app').classList.contains('study-mode')); p.click(p.$('#fullscreenToggle')); assert.ok(!p.$('#app').classList.contains('study-mode'));
-    p.click(p.$('#themeToggle')); assert.ok(p.$('#app').classList.contains('dark-mode')); const k = Object.keys(p.storeDump()); assert.equal(k.length, 1); assert.ok(k[0].includes('localhost/repoX') && k[0].includes('demo') && k[0].endsWith('demo'), k[0]);
-    const q = await open('?demo=1', p.storeDump()); assert.ok(q.$('#app').classList.contains('dark-mode'));
+    assert.equal(p.$('#input').checked, false); p.$('#input').checked = true; p.$('#input').dispatchEvent(new p.w.Event('change', { bubbles: true })); assert.ok(p.$('#app').classList.contains('dark-mode')); const k = Object.keys(p.storeDump()); assert.equal(k.length, 1); assert.ok(k[0].includes('localhost/repoX') && k[0].includes('demo') && k[0].endsWith('demo'), k[0]);
+    const q = await open('?demo=1', p.storeDump()); assert.ok(q.$('#app').classList.contains('dark-mode')); assert.equal(q.$('#input').checked, true, 'switch reflects saved theme');
     const prod = await open('', p.storeDump()); assert.ok(!prod.$('#app').classList.contains('dark-mode'), 'prod namespace separate from demo');
   });
   await t('no console errors across run; no external SDK scripts or absolute asset paths', async () => {

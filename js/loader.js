@@ -32,7 +32,7 @@
       if (!l || l.id == null || !String(l.title || '').trim()) { warnings.push('محاضرة بلا id أو عنوان تم تجاهلها'); continue; }
       const id = String(l.id);
       if (lectureById.has(id)) { warnings.push('معرّف محاضرة مكرر: ' + id); continue; }
-      const lec = { id, title: String(l.title), icon: l.icon || '📘', order: Number.isFinite(l.order) ? l.order : null };
+      const lec = { id, title: String(l.title), icon: l.icon || '📘', order: Number.isFinite(l.order) ? l.order : null, number: l.number != null && String(l.number).trim() ? String(l.number).trim() : null };
       lectureById.set(id, lec); lectures.push(lec);
     }
     lectures.sort((a, b) => (a.order ?? 1e9) - (b.order ?? 1e9) || lectures.indexOf(a) - lectures.indexOf(b));

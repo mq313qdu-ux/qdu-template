@@ -1,11 +1,11 @@
 /* Versioned localStorage store, namespaced per repository + subject (+ demo). */
 (function (g) {
   const QDU = (g.QDU = g.QDU || {});
-  const SCHEMA = 1;
+  const SCHEMA = 2;
 
   function emptyState() {
     return {
-      settings: { dark: false, translate: 'off', tts: { scope: 'question', lang: 'en', voice: '', rate: 1 } },
+      settings: { dark: false, translate: 'off', tts: { scope: 'all', lang: 'en', voices: { en: 'Google UK English Female', ar: '' }, rate: 0.8 } },
       sessions: {},      // unfinished quizzes (auto-saved)
       attempts: [],      // permanent history of completed attempts (never deleted)
       latest: {},        // qid -> last saved answer
@@ -18,13 +18,17 @@
     };
   }
   // migrations[n] upgrades a state from schema n to n+1
-  const migrations = {};
+  const migrations = {
+    // 1 -> 2: new default TTS settings (Google UK English Female, 0.8x, question + options)
+    1: (s) => { if (s.settings) s.settings.tts = emptyState().settings.tts; return s; }
+  };
 
   function withDefaults(s) {
     const d = emptyState();
     for (const k of Object.keys(d)) if (s[k] == null) s[k] = d[k];
     s.settings = Object.assign({}, d.settings, s.settings);
     s.settings.tts = Object.assign({}, d.settings.tts, s.settings.tts);
+    s.settings.tts.voices = Object.assign({}, d.settings.tts.voices, s.settings.tts.voices);
     s.activity = Object.assign({}, d.activity, s.activity);
     s.runs = Object.assign({}, d.runs, s.runs);
     return s;

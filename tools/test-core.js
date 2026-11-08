@@ -89,6 +89,26 @@ const run = (st, c, s, answers, ts) => { answers.forEach((ch, i) => { const q = 
 
   console.log('storage');
   const mem = () => { const m = {}; return { getItem: (k) => (k in m ? m[k] : null), setItem: (k, v) => { m[k] = v; }, removeItem: (k) => delete m[k], _m: m }; };
+  console.log('hints / migration');
+  await t('hint removes 2 wrong options, never the correct one, 3 per session, once per question, persists', async () => {
+    const s9 = C.newSession(c, 'lecture', 'L1', c.byLecture.get('L1').map((q) => q.id), T0, 'x'); const st9 = S.emptyState(); st9.sessions[s9.id] = s9;
+    for (let i = 0; i < 3; i++) { const q = c.qById.get(s9.qids[i]), r = C.useHint(s9, q); assert.ok(r.ok); assert.equal(r.removed.length, 2); assert.ok(!r.removed.includes(q.correct)); assert.equal(C.useHint(s9, q).reason, 'used'); }
+    assert.equal(s9.hintsUsed, 3); assert.equal(C.useHint(s9, c.qById.get(s9.qids[3])).reason, 'exhausted');
+    const q0 = c.qById.get(s9.qids[0]); assert.equal(C.recordAnswer(st9, c, s9, q0.id, s9.hints[q0.id][0], T0).reason, 'removed'); assert.ok(C.recordAnswer(st9, c, s9, q0.id, q0.correct, T0).ok);
+    assert.equal(C.useHint(s9, q0).reason, 'answered');
+  });
+  await t('hint on 3-option question removes 1; 2-option question unavailable', async () => {
+    const c3 = await load(mk(1, 1, 3)), c2 = await load(mk(1, 1, 2));
+    const a = C.newSession(c3, 'custom', null, ['L1-Q1'], T0, 'x'), r = C.useHint(a, c3.qById.get('L1-Q1')); assert.equal(r.removed.length, 1);
+    const b = C.newSession(c2, 'custom', null, ['L1-Q1'], T0, 'x'); assert.equal(C.useHint(b, c2.qById.get('L1-Q1')).reason, 'toofew'); assert.equal(b.hintsUsed, 0);
+  });
+  await t('schema 1 -> 2 migration applies new TTS defaults and keeps all data', () => {
+    const b = mem(); b.setItem('m', JSON.stringify({ schema: 1, state: { favorites: { z: 1 }, attempts: [{ id: 'a' }], settings: { dark: true, translate: 'both', tts: { scope: 'question', lang: 'ar', voice: 'x', rate: 1 } } } }));
+    const s1 = S.createStore('m', b); const tt = s1.state.settings.tts;
+    assert.equal(tt.rate, 0.8); assert.equal(tt.scope, 'all'); assert.equal(tt.lang, 'en'); assert.equal(tt.voices.en, 'Google UK English Female');
+    assert.equal(s1.state.settings.dark, true); assert.equal(s1.state.settings.translate, 'both'); assert.equal(s1.state.favorites.z, 1); assert.equal(s1.state.attempts.length, 1);
+    s1.save(); assert.equal(JSON.parse(b.getItem('m')).schema, 2);
+  });
   await t('namespaces isolate subjects and repos; demo isolated', () => {
     const b = mem(), k1 = S.storageKey('u.github.io/a', 'math'), k2 = S.storageKey('u.github.io/b', 'math'), k3 = S.storageKey('u.github.io/a', 'math', true);
     assert.equal(new Set([k1, k2, k3]).size, 3); const s1 = S.createStore(k1, b); s1.state.favorites.x = 1; s1.save(); assert.deepEqual(S.createStore(k2, b).state.favorites, {}); assert.equal(S.createStore(k1, b).state.favorites.x, 1);

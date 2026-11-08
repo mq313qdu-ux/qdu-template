@@ -14,7 +14,8 @@
   function pickVoice(lang, pref) {
     const list = voicesFor(lang);
     if (pref) { const f = list.find((v) => v.voiceURI === pref || v.name === pref); if (f) return f; }
-    return list.find((v) => FEMALE.test(v.name)) || list.find((v) => v.default) || list[0] || null;
+    const fem = list.filter((v) => FEMALE.test(v.name));
+    return fem.find((v) => /en[-_]gb/i.test(v.lang)) || fem[0] || list.find((v) => v.default) || list[0] || null;
   }
 
   // segments: [{text, lang:'en'|'ar'}]; opts: {voices:{en,ar}, rate, onEnd}

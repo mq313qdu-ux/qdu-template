@@ -3,6 +3,7 @@
   const QDU = (g.QDU = g.QDU || {});
   const U = QDU.util || require('./util.js').util;
 
+  const MAX_HINTS = 3;
   const ACHIEVEMENTS = [
     { id: 'distinct100', icon: '📚', title: 'حل 100 سؤال مختلف', target: 100, progress: (s) => Object.keys(s.latest).length },
     { id: 'attempts10', icon: '📝', title: 'إكمال 10 اختبارات', target: 10, progress: (s) => s.attempts.length },
@@ -65,7 +66,7 @@
   function newSession(content, kind, lectureId, qids, ts, title) {
     return { id: U.uid('s'), kind, lectureId: lectureId == null ? null : lectureId, title, qids: qids.slice(),
       fullSet: kind === 'lecture' && qids.length === (content.byLecture.get(lectureId) || []).length,
-      answers: {}, idx: 0, elapsedMs: 0, startedAt: ts, updatedAt: ts };
+      answers: {}, hints: {}, hintsUsed: 0, idx: 0, elapsedMs: 0, startedAt: ts, updatedAt: ts };
   }
 
   // Records one answer. A question in a session can be answered only once (no double scoring on back/forward).
@@ -75,6 +76,7 @@
     if (!q) return { ok: false, reason: 'missing' };
     if (!session.qids.includes(qid)) return { ok: false, reason: 'notInSession' };
     if (!Number.isInteger(choice) || choice < 0 || choice >= q.options.length) return { ok: false, reason: 'range' };
+    if (((session.hints || {})[qid] || []).includes(choice)) return { ok: false, reason: 'removed' };
     const isCorrect = choice === q.correct;
     session.answers[qid] = { choice, isCorrect, at: ts };
     session.updatedAt = ts;
@@ -91,6 +93,21 @@
     }
     addActivity(state, ts);
     return { ok: true, isCorrect, newAchievements: evaluateAchievements(state, ts) };
+  }
+
+  // Hint = removes up to two WRONG options (never the correct one), max MAX_HINTS per quiz session, once per question.
+  function useHint(session, q, rnd) {
+    session.hints = session.hints || {}; session.hintsUsed = session.hintsUsed || 0;
+    if (session.answers[q.id]) return { ok: false, reason: 'answered' };
+    if (session.hints[q.id]) return { ok: false, reason: 'used' };
+    if (session.hintsUsed >= MAX_HINTS) return { ok: false, reason: 'exhausted' };
+    const wrong = q.options.map((_, i) => i).filter((i) => i !== q.correct);
+    const count = Math.min(2, wrong.length - 1);
+    if (count < 1) return { ok: false, reason: 'toofew' };
+    const r = rnd || Math.random, pool = wrong.slice(), removed = [];
+    while (removed.length < count) removed.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
+    session.hints[q.id] = removed.sort((a, b) => a - b); session.hintsUsed++;
+    return { ok: true, removed: session.hints[q.id], left: MAX_HINTS - session.hintsUsed };
   }
 
   // Completes a session into a permanent attempt. Idempotent: the attempt id derives from the session id.
@@ -111,7 +128,7 @@
       startedAt: session.startedAt, completedAt: ts, durationMs: session.elapsedMs || 0,
       correct, wrong: total - correct, total, pct: U.pct(correct, total),
       full: session.kind === 'lecture' && !!session.fullSet && !!lec && total === (content.byLecture.get(session.lectureId) || []).length,
-      celebrated: false, items
+      hintsUsed: session.hintsUsed || 0, celebrated: false, items
     };
     state.attempts.push(attempt);
     delete state.sessions[session.id];
@@ -135,6 +152,7 @@
       s.qids = s.qids.filter((q) => content.qById.has(q));
       for (const k of Object.keys(s.answers)) if (!content.qById.has(k)) delete s.answers[k];
       if (!s.qids.length) { delete state.sessions[id]; continue; }
+      s.hints = s.hints || {}; s.hintsUsed = s.hintsUsed || 0;
       s.idx = Math.min(Math.max(0, s.idx | 0), s.qids.length - 1);
     }
   }
@@ -146,7 +164,7 @@
     return { key: 'fail', label: '❌ راسب', cls: 'badge-fail', msg: 'حاول مرة أخرى! التعلم يحتاج للممارسة المستمرة 💪' };
   }
 
-  QDU.core = { ACHIEVEMENTS, streaks, addActivity, evaluateAchievements, lectureStats, activeMistakeIds, favoriteIds, toggleFavorite,
+  QDU.core = { MAX_HINTS, useHint, ACHIEVEMENTS, streaks, addActivity, evaluateAchievements, lectureStats, activeMistakeIds, favoriteIds, toggleFavorite,
     newSession, recordAnswer, finalizeSession, compareFull, reconcile, rating, level };
   if (typeof module !== 'undefined') module.exports = QDU.core;
 })(typeof window !== 'undefined' ? window : globalThis);

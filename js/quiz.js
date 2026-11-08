@@ -8,7 +8,7 @@
   const App = () => QDU.App;
   const st = () => App().state, content = () => App().content;
   const curQ = () => content().qById.get(session.qids[session.idx]);
-  const resetUi = () => { ui = { sel: -1, hint: false, why: false, fresh: false, ttsOpen: ui.ttsOpen || false }; };
+  const resetUi = () => { ui = { sel: -1, why: false, fresh: false, settingsOpen: ui.settingsOpen || false }; };
 
   /* ---------- time / autosave ---------- */
   function tick() { const now = Date.now(); if (session && lastTick) session.elapsedMs = (session.elapsedMs || 0) + Math.min(now - lastTick, 5000); lastTick = now; }
@@ -49,7 +49,7 @@
   /* ---------- quiz view ---------- */
   Quiz.view = function (sid) {
     const s = st().sessions[sid]; if (!s) return false;
-    session = s; resetUi(); ui.ttsOpen = false; startTimers(); renderQuiz(); window.scrollTo(0, 0); return true;
+    session = s; resetUi(); ui.settingsOpen = false; startTimers(); renderQuiz(); window.scrollTo(0, 0); return true;
   };
   Quiz.leave = function () {
     if (session) persist();
@@ -61,17 +61,41 @@
 
   function trData(en) { const t = en && en.translation; return t && typeof t === 'object' ? t : null; }
 
+  function lectureHead() {
+    if (session.kind !== 'lecture') return { num: null, title: session.title };
+    const c = content(), lec = c.lectureById.get(session.lectureId);
+    if (!lec) return { num: null, title: session.title };
+    return { num: lec.number != null ? lec.number : c.lectures.indexOf(lec) + 1, title: lec.title };
+  }
+  const removedOf = (q) => (session.hints || {})[q.id] || [];
+  const selectable = (q) => q.options.map((_, i) => i).filter((i) => !removedOf(q).includes(i));
+
+  function settingsPanel(set) {
+    const lang = set.tts.lang, vs = TTS.voicesFor(lang), sel = (set.tts.voices || {})[lang] || '', ttsOk = TTS.supported();
+    const isSel = (v) => v.voiceURI === sel || v.name === sel;
+    const msg = !ttsOk ? 'القراءة الصوتية غير مدعومة في هذا المتصفح.' : !vs.length ? (lang === 'ar' ? 'لا يتوفر صوت عربي على هذا الجهاز؛ جرّب القراءة بالإنجليزية أو ثبّت صوتًا عربيًا من إعدادات النظام.' : 'لم يُعثر على صوت إنجليزي مخصص؛ سيُستخدم الصوت الافتراضي.')
+      : (sel && !vs.some(isSel) ? 'الصوت المفضل غير متوفر على هذا الجهاز، سيُستخدم أقرب صوت متاح.' : '');
+    return `<div class="tts-panel settings-panel"><b>⚙️ إعدادات القراءة الصوتية</b>
+      <div class="field"><label>المحتوى</label><select data-set="scope"><option value="question" ${set.tts.scope === 'question' ? 'selected' : ''}>السؤال فقط</option><option value="all" ${set.tts.scope === 'all' ? 'selected' : ''}>السؤال مع الاختيارات</option></select></div>
+      <div class="field"><label>اللغة</label><select data-set="lang"><option value="en" ${lang === 'en' ? 'selected' : ''}>English (النص الأصلي)</option><option value="ar" ${lang === 'ar' ? 'selected' : ''}>العربية (الترجمة)</option></select></div>
+      <div class="field"><label>الصوت</label><select data-set="voice" ${vs.length ? '' : 'disabled'}><option value="">تلقائي (صوت نسائي إن وُجد)</option>${vs.map((v) => `<option value="${esc(v.voiceURI)}" ${isSel(v) ? 'selected' : ''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')}</select></div>
+      <div class="field"><label>السرعة</label><input type="range" data-set="rate" min="0.6" max="1.4" step="0.1" value="${set.tts.rate}"><span>x${set.tts.rate}</span></div>
+      ${msg ? `<div class="msg">${msg}</div>` : ''}
+      <div class="field"><button class="btn ghost sm" data-act="qTtsReset">استعادة الإعدادات الافتراضية</button></div></div>`;
+  }
+
   function renderQuiz() {
-    const q = curQ(), A = App(), s = st(), set = s.settings, en = content().enrichment.get(q.id) || {};
+    const q = curQ(), s = st(), set = s.settings, en = content().enrichment.get(q.id) || {};
     const fresh = ui.fresh; ui.fresh = false;
     const ans = session.answers[q.id], n = session.qids.length, idx = session.idx, last = idx === n - 1;
     const tr = trData(en), mode = set.translate, showQ = mode === 'question' || mode === 'both', showO = mode === 'options' || mode === 'both';
-    const isFav = !!s.favorites[q.id];
+    const isFav = !!s.favorites[q.id], removed = removedOf(q), head = lectureHead();
     const optHtml = q.options.map((o, i) => {
-      const cls = ['option-btn'];
+      const cls = ['option-btn'], isRem = removed.includes(i);
+      if (isRem) cls.push('removed');
       if (ans) { if (i === q.correct) cls.push('correct'); if (i === ans.choice && !ans.isCorrect) cls.push('incorrect'); } else if (i === ui.sel) cls.push('selected');
       const t = showO && tr && Array.isArray(tr.options) && tr.options[i] ? `<span class="opt-tr">${esc(tr.options[i])}</span>` : '';
-      return `<button class="${cls.join(' ')}" data-act="qAnswer" data-i="${i}" ${ans ? 'disabled' : ''} aria-pressed="${i === ui.sel}"><span class="opt-main"><span class="opt-letter">${U.letter(i)})</span><span>${esc(o)}</span></span>${t}${fresh && ans && ans.isCorrect && i === q.correct ? '<span class="burst">✨</span>' : ''}</button>`;
+      return `<button class="${cls.join(' ')}" data-act="qAnswer" data-i="${i}" ${ans || isRem ? 'disabled' : ''} aria-pressed="${i === ui.sel}"><span class="opt-main"><span class="opt-letter">${U.letter(i)})</span><span>${esc(o)}</span></span>${t}${fresh && ans && ans.isCorrect && i === q.correct ? '<span class="burst">✨</span>' : ''}</button>`;
     }).join('');
 
     let trBlock = '';
@@ -79,42 +103,38 @@
     if (showO && !(tr && Array.isArray(tr.options) && tr.options.length)) trBlock += `<div class="tr-note">لا تتوفر ترجمة للاختيارات بعد.</div>`;
 
     let extra = '';
-    if (!ans && ui.hint) extra += `<div class="hint-box">💡 ${en.hint ? esc(en.hint) : 'لا يتوفر تلميح لهذا السؤال بعد.'}</div>`;
     if (ans && !ans.isCorrect) extra += `<div class="feedback-box error">❌ الإجابة الصحيحة: <span class="ltr-tag" dir="ltr">${U.letter(q.correct)}) ${esc(q.options[q.correct])}</span><br>${en.explanation ? esc(en.explanation) : 'لا يتوفر شرح لهذا السؤال بعد.'}</div>`;
     if (ans && ui.why) extra += whyHtml(q, en);
 
-    const ttsOk = TTS.supported(), lang = set.tts.lang, vs = TTS.voicesFor(lang), sel = (set.tts.voices || {})[lang] || '';
-    const ttsMsg = !ttsOk ? 'القراءة الصوتية غير مدعومة في هذا المتصفح.' : !vs.length ? (lang === 'ar' ? 'لا يتوفر صوت عربي على هذا الجهاز؛ جرّب القراءة بالإنجليزية أو ثبّت صوتًا عربيًا من إعدادات النظام.' : 'لم يُعثر على صوت إنجليزي مخصص؛ سيُستخدم الصوت الافتراضي.') : '';
-    const playing = TTS.isPlaying();
+    const left = C.MAX_HINTS - (session.hintsUsed || 0), usedHere = removed.length > 0, canHint = !usedHere && left > 0 && q.options.length > 2;
+    const hintChip = `<button class="chip ${usedHere ? 'on' : ''}" data-act="qHint" ${canHint ? '' : 'disabled'} title="يحذف خيارين خاطئين — ${C.MAX_HINTS} مرات فقط لكل اختبار">💡 ${usedHere ? 'تم حذف خيارين' : 'حذف خيارين'} (${left}/${C.MAX_HINTS})</button>`;
+    const ttsOk = TTS.supported(), playing = TTS.isPlaying();
 
     $('#view').innerHTML = `<div class="quiz-container">
       <div class="quiz-header">
-        <div class="quiz-top"><button class="btn ghost sm" data-act="qExit">✕ خروج</button><h2 class="quiz-title">${esc(session.title)}</h2></div>
+        <div class="quiz-top">
+          <button class="icon-btn gear ${ui.settingsOpen ? 'on' : ''}" data-act="qSettings" aria-label="إعدادات القراءة الصوتية" aria-expanded="${!!ui.settingsOpen}" title="إعدادات القراءة الصوتية">⚙️</button>
+          <div class="quiz-heading">${head.num != null ? `<div class="lecture-number">المحاضرة ${esc(head.num)}</div>` : ''}<h2 class="quiz-title">${esc(head.title)}</h2></div>
+          <button class="btn ghost sm" data-act="qExit">✕ خروج</button>
+        </div>
+        ${ui.settingsOpen ? settingsPanel(set) : ''}
         <div class="progress-bar"><div class="progress-fill" style="width:${((idx + 1) / n) * 100}%"></div></div>
         <div class="quiz-meta"><span>السؤال ${idx + 1} من ${n}</span><span class="timer" id="quizTimer">⏱ ${U.fmtDur(session.elapsedMs)}</span></div>
       </div>
       <div class="toolbar">
         <button class="chip ${isFav ? 'on' : ''}" data-act="qFav" aria-pressed="${isFav}">${isFav ? '⭐ في المفضلة' : '☆ مفضلة'}</button>
-        ${ans ? `<button class="chip ${ui.why ? 'on' : ''}" data-act="qWhy">🧠 لماذا هذه الإجابة؟</button>` : `<button class="chip ${ui.hint ? 'on' : ''}" data-act="qHint">💡 تلميح</button>`}
+        ${ans ? `<button class="chip ${ui.why ? 'on' : ''}" data-act="qWhy">🧠 لماذا هذه الإجابة؟</button>` : hintChip}
         <span class="seg" role="group" aria-label="الترجمة">${[['off', 'بدون ترجمة'], ['question', 'السؤال'], ['options', 'الاختيارات'], ['both', 'الكل']].map(([v, l]) => `<button class="${mode === v ? 'on' : ''}" data-act="qTr" data-v="${v}">${l}</button>`).join('')}</span>
         <button class="chip ${playing ? 'on' : ''}" data-act="qTts" ${ttsOk ? '' : 'disabled'}>${playing ? '⏹ إيقاف' : '🔊 قراءة'}</button>
-        <details class="tts-panel" ${ui.ttsOpen ? 'open' : ''}><summary>⚙ إعدادات القراءة الصوتية</summary>
-          <div class="field"><label>المحتوى</label><select data-set="scope"><option value="question" ${set.tts.scope === 'question' ? 'selected' : ''}>السؤال فقط</option><option value="all" ${set.tts.scope === 'all' ? 'selected' : ''}>السؤال مع الاختيارات</option></select></div>
-          <div class="field"><label>اللغة</label><select data-set="lang"><option value="en" ${lang === 'en' ? 'selected' : ''}>English (النص الأصلي)</option><option value="ar" ${lang === 'ar' ? 'selected' : ''}>العربية (الترجمة)</option></select></div>
-          <div class="field"><label>الصوت</label><select data-set="voice" ${vs.length ? '' : 'disabled'}><option value="">تلقائي (صوت نسائي إن وُجد)</option>${vs.map((v) => `<option value="${esc(v.voiceURI)}" ${v.voiceURI === sel ? 'selected' : ''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')}</select></div>
-          <div class="field"><label>السرعة</label><input type="range" data-set="rate" min="0.6" max="1.4" step="0.1" value="${set.tts.rate}"><span>${set.tts.rate}×</span></div>
-          ${ttsMsg ? `<div class="msg">${ttsMsg}</div>` : ''}
-        </details>
       </div>
       <div class="question-section">
-        <div class="question-header"><div class="question-text q-text" dir="ltr" lang="en">${esc(q.text)}</div></div>
+        <div class="question-header"><div class="question-text q-text" dir="ltr" lang="en"><span class="q-num">${idx + 1}.</span> ${esc(q.text)}</div></div>
         ${trBlock}
         <div class="options-container">${optHtml}</div>
         ${extra}
         <div class="nav-row"><button class="prev-btn" data-act="qPrev" ${idx === 0 ? 'disabled' : ''}>→ السابق</button>
           <button class="next-btn" data-act="qNext" ${ans ? '' : 'disabled'}>${last ? 'إنهاء وعرض النتيجة' : 'التالي ←'}</button></div>
-      </div>
-      <div class="kbd-help">↑ ↓ لتحديد الاختيار · Space أو Ctrl لتأكيده · ← السابق · → التالي</div></div>`;
+      </div></div>`;
   }
 
   function whyHtml(q, en) {
@@ -134,7 +154,7 @@
     const q = curQ(); if (session.answers[q.id]) return;
     const r = C.recordAnswer(st(), content(), session, q.id, i, Date.now());
     if (!r.ok) return;
-    ui.sel = i; ui.fresh = true; ui.hint = false; persist();
+    ui.sel = i; ui.fresh = true; persist();
     r.newAchievements.forEach((a) => App().toast('🏅 إنجاز جديد: ' + a.title, 'gold', 3800));
     renderQuiz(); App().renderNav();
     if (r.isCorrect) {
@@ -185,7 +205,14 @@
       qAnswer: (b) => answer(+b.dataset.i),
       qPrev: prev, qNext: next,
       qFav: () => { const q = curQ(), on = C.toggleFavorite(st(), q, Date.now()); App().save(); renderQuiz(); App().renderNav(); App().toast(on ? '⭐ أُضيف إلى المفضلة' : 'أُزيل من المفضلة'); },
-      qHint: () => { ui.hint = !ui.hint; renderQuiz(); },
+      qHint: () => {
+        const q = curQ(), r = C.useHint(session, q);
+        if (!r.ok) return App().toast({ exhausted: 'استُهلكت التلميحات الثلاثة لهذا الاختبار', used: 'استخدمت التلميح لهذا السؤال', toofew: 'لا يمكن حذف خيارات من سؤال بخيارين' }[r.reason] || '', '');
+        if (r.removed.includes(ui.sel)) ui.sel = -1;
+        persist(); renderQuiz(); App().toast(`💡 حُذف خيارين — بقي ${r.left} من ${C.MAX_HINTS}`);
+      },
+      qSettings: () => { ui.settingsOpen = !ui.settingsOpen; renderQuiz(); },
+      qTtsReset: () => { TTS.stop(); st().settings.tts = QDU.Storage.emptyState().settings.tts; App().save(); renderQuiz(); },
       qWhy: () => { cancelAdvance(); ui.why = !ui.why; renderQuiz(); },  // opening the explanation pauses the auto-advance
       qTr: (b) => { st().settings.translate = b.dataset.v; App().save(); renderQuiz(); },
       qTts: toggleTts,
@@ -219,19 +246,18 @@
       if (k === 'rate') t.rate = +e.target.value; else if (k === 'voice') { t.voices = t.voices || {}; t.voices[t.lang] = e.target.value; } else t[k] = e.target.value;
       App().save(); if (session) renderQuiz();
     });
-    view.addEventListener('toggle', (e) => { if (e.target.classList && e.target.classList.contains('tts-panel')) ui.ttsOpen = e.target.open; }, true);
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Control') { ctrlSolo = !e.repeat; return; }
       ctrlSolo = false;
       if (!session || !App().route || App().route.name !== 'quiz' || App().modalOpen() || isEditable(e.target)) return;
       if (e.ctrlKey || e.metaKey || e.altKey) return;
-      const answered = !!session.answers[curQ().id], n = curQ().options.length;
+      const cq = curQ(), answered = !!session.answers[cq.id], pool = selectable(cq);
       const interactive = e.target.closest && e.target.closest('button,a,summary,[tabindex]');
       switch (e.key) {
         case 'ArrowDown': case 'ArrowUp':
           if (answered) return; e.preventDefault();
-          ui.sel = ui.sel < 0 ? (e.key === 'ArrowDown' ? 0 : n - 1) : (ui.sel + (e.key === 'ArrowDown' ? 1 : n - 1)) % n;
+          { const p = pool.indexOf(ui.sel), m = pool.length; ui.sel = pool[p < 0 ? (e.key === 'ArrowDown' ? 0 : m - 1) : (p + (e.key === 'ArrowDown' ? 1 : m - 1)) % m]; }
           renderQuiz(); { const el = document.querySelector('.option-btn.selected'); el && el.scrollIntoView && el.scrollIntoView({ block: 'nearest' }); }
           break;
         case ' ':
@@ -298,7 +324,7 @@
     const review = a.items.map((it, i) => {
       const live = c.qById.has(it.qid), en = c.enrichment.get(it.qid), ex = (en && en.explanation) || it.explanation;
       return `<div class="review-q ${it.isCorrect ? 'ok' : 'no'}"><div>${it.isCorrect ? '✅' : '❌'} سؤال ${i + 1}${live ? '' : ' <span class="badge warn">محذوف من المحتوى الحالي</span>'}</div>
-        <div class="q">${esc(it.text)}</div>
+        <div class="q">${i + 1}. ${esc(it.text)}</div>
         ${it.isCorrect ? '' : `<div class="a u">إجابتك: ${U.letter(it.choice)}) ${esc(it.options[it.choice])}</div>`}
         <div class="a c">الإجابة الصحيحة: ${U.letter(it.correct)}) ${esc(it.options[it.correct])}</div>
         <div class="ex">${ex ? esc(ex) : '<span style="opacity:.7">لا يتوفر شرح لهذا السؤال.</span>'}</div></div>`;
@@ -309,7 +335,7 @@
       <div class="results-chart-wrapper"><svg viewBox="0 0 200 200" class="circular-progress"><circle class="progress-ring-bg" cx="100" cy="100" r="85"></circle><circle class="progress-ring ${tone}" id="progressRing" cx="100" cy="100" r="85" stroke-dasharray="534" stroke-dashoffset="534"></circle></svg>
         <div class="results-center-content"><div class="results-score ${tone}" id="finalScore">0%</div><div class="results-label">النسبة المئوية</div></div></div>
       <div class="performance-badge ${rt.cls}">${rt.label}</div>
-      <div class="results-meta"><span class="badge">الدرجة: <b>${a.correct} / ${a.total}</b></span><span class="badge">⏱ ${U.fmtDur(a.durationMs)}</span><span class="badge">📅 ${esc(U.fmtDate(a.completedAt))}</span></div>
+      <div class="results-meta"><span class="badge">الدرجة: <b>${a.correct} / ${a.total}</b></span><span class="badge">⏱ ${U.fmtDur(a.durationMs)}</span>${a.hintsUsed ? `<span class="badge">💡 ${a.hintsUsed}</span>` : ''}<span class="badge">📅 ${esc(U.fmtDate(a.completedAt))}</span></div>
       <div class="results-stats">
         <div class="stat-card correct-card"><div class="stat-icon">✅</div><div class="stat-value" id="rc">0</div><div class="stat-label">إجابات صحيحة</div></div>
         <div class="stat-card wrong-card"><div class="stat-icon">❌</div><div class="stat-value" id="rw">0</div><div class="stat-label">إجابات خاطئة</div></div>
