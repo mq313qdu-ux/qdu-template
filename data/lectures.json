@@ -4,27 +4,27 @@
     "title": "LINES & PLANES OF PROJECTION OF THE SKULL",
     "number": "1",
     "order": 1,
-    "icon": "🩻"
+    "icon": "📘"
   },
   {
     "id": "rad-l2",
     "title": "SKULL RADIOGRAPHIC PROJECTIONS",
     "number": "2",
     "order": 2,
-    "icon": "🩻"
+    "icon": "📗"
   },
   {
     "id": "rad-l3",
     "title": "PARANASAL SINUSES, FACE & NOSE",
     "number": "3",
     "order": 3,
-    "icon": "🩻"
+    "icon": "📙"
   },
   {
     "id": "rad-l4",
     "title": "MANDIBLE & TMJ",
     "number": "4",
     "order": 4,
-    "icon": "🩻"
+    "icon": "📕"
   }
 ]
