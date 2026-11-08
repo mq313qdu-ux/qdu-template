@@ -1,7 +1,0 @@
-{
-  "meta": {
-    "dialect": "ar-IQ",
-    "note": "items: { \"<question id>\": { translation:{q,options[]}, explanation, hint, why:{correct, wrong:{\"<optionIndex>\":\"...\"}} } }"
-  },
-  "items": {}
-}

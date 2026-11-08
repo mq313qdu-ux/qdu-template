@@ -1,1 +1,0 @@
-{"name":"qdu-tools","private":true,"scripts":{"validate":"node validate-data.js ../data","test:core":"node test-core.js","test:ui":"npm i jsdom && node test-ui.js"},"dependencies":{"jsdom":"^31.0.0"}}
