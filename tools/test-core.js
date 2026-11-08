@@ -88,6 +88,39 @@ const run = (st, c, s, answers, ts) => { answers.forEach((ch, i) => { const q = 
   });
 
   console.log('storage');
+  await t('corrected answer keys update saved progress, resumed answers and hints idempotently', async () => {
+    const original = await load(mk(1, 2));
+    const state = S.emptyState();
+    const session = C.newSession(original, 'lecture', 'L1', ['L1-Q1', 'L1-Q2'], T0, 'Correction');
+    state.sessions[session.id] = session;
+    C.recordAnswer(state, original, session, 'L1-Q1', 0, T0);
+    C.useHint(session, original.qById.get('L1-Q2'), () => 0);
+    const completed = C.newSession(original, 'custom', null, ['L1-Q1'], T0, 'History');
+    C.recordAnswer(state, original, completed, 'L1-Q1', 1, T0 + 1);
+    C.finalizeSession(state, original, completed, T0 + 2);
+    const history = JSON.stringify(state.attempts);
+    const updatedFiles = mk(1, 2);
+    updatedFiles['questions.json'].forEach((q) => { q.correct = 0; });
+    const corrected = await load(updatedFiles);
+    C.reconcile(state, corrected);
+    assert.equal(session.answers['L1-Q1'].isCorrect, true);
+    assert.equal(state.latest['L1-Q1'].isCorrect, false);
+    assert.equal(state.mistakes['L1-Q1'].status, 'active');
+    assert.ok(!session.hints['L1-Q2'].includes(0));
+    assert.equal(session.hintsUsed, 1);
+    assert.equal(JSON.stringify(state.attempts), history);
+    const reconciled = JSON.stringify(state);
+    C.reconcile(state, corrected);
+    assert.equal(JSON.stringify(state), reconciled);
+    const previouslyWrong = S.emptyState();
+    const oldSession = C.newSession(original, 'lecture', 'L1', ['L1-Q1'], T0, 'Old answer');
+    previouslyWrong.sessions[oldSession.id] = oldSession;
+    C.recordAnswer(previouslyWrong, original, oldSession, 'L1-Q1', 0, T0);
+    C.reconcile(previouslyWrong, corrected);
+    assert.equal(previouslyWrong.latest['L1-Q1'].isCorrect, true);
+    assert.equal(previouslyWrong.mistakes['L1-Q1'].status, 'resolved');
+    assert.equal(C.lectureStats(previouslyWrong, corrected, 'L1').correct, 1);
+  });
   const mem = () => { const m = {}; return { getItem: (k) => (k in m ? m[k] : null), setItem: (k, v) => { m[k] = v; }, removeItem: (k) => delete m[k], _m: m }; };
   console.log('hints / migration');
   await t('hint removes 2 wrong options, never the correct one, 3 per session, once per question, persists', async () => {

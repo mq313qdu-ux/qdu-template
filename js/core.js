@@ -146,13 +146,35 @@
       sameTotal: first.total === last.total, verdict: dPct > 0 ? 'improved' : dPct < 0 ? 'regressed' : 'same' };
   }
 
-  // keep history, adapt only unfinished sessions to the current content
+  // Reconcile live progress and unfinished sessions with the current answer key.
   function reconcile(state, content) {
+    for (const q of content.questions) {
+      const latest = state.latest[q.id];
+      if (!latest || latest.isCorrect === (latest.choice === q.correct)) continue;
+      latest.isCorrect = latest.choice === q.correct;
+      const mistake = state.mistakes[q.id];
+      if (latest.isCorrect) {
+        if (mistake) { mistake.status = 'resolved'; mistake.resolvedAt = latest.at; }
+      } else {
+        const active = state.mistakes[q.id] = mistake || { firstAt: latest.at, wrongCount: 0 };
+        active.status = 'active'; active.lastAt = latest.at;
+        active.wrongCount = Math.max(active.wrongCount || 0, 1);
+        active.text = q.text; active.lectureId = q.lectureId;
+        delete active.resolvedAt;
+      }
+    }
     for (const [id, s] of Object.entries(state.sessions)) {
       s.qids = s.qids.filter((q) => content.qById.has(q));
-      for (const k of Object.keys(s.answers)) if (!content.qById.has(k)) delete s.answers[k];
+      for (const k of Object.keys(s.answers)) {
+        const q = content.qById.get(k);
+        if (!q) delete s.answers[k];
+        else s.answers[k].isCorrect = s.answers[k].choice === q.correct;
+      }
       if (!s.qids.length) { delete state.sessions[id]; continue; }
       s.hints = s.hints || {}; s.hintsUsed = s.hintsUsed || 0;
+      for (const qid of s.qids) {
+        if (s.hints[qid]) s.hints[qid] = s.hints[qid].filter((choice) => choice !== content.qById.get(qid).correct);
+      }
       s.idx = Math.min(Math.max(0, s.idx | 0), s.qids.length - 1);
     }
   }
