@@ -1,0 +1,10 @@
+{
+  "id": "demo",
+  "name": "مادة تجريبية (Demo)",
+  "platformTitle": "",
+  "author": "مُعِدّ تجريبي",
+  "contentVersion": "1",
+  "enrichmentFiles": [
+    "enrichment.json"
+  ]
+}

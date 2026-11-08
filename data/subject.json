@@ -1,0 +1,10 @@
+{
+  "id": "",
+  "name": "",
+  "platformTitle": "",
+  "author": "",
+  "contentVersion": "1",
+  "enrichmentFiles": [
+    "enrichment.json"
+  ]
+}
