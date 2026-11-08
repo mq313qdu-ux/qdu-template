@@ -3,7 +3,7 @@
   "name": "التصوير الشعاعي",
   "platformTitle": "منصة QDU للاختبار التفاعلي",
   "author": "مقتدى الكناني",
-  "contentVersion": "radiography-3",
+  "contentVersion": "radiography-4",
   "enrichmentFiles": [
     "enrichment.json"
   ]
