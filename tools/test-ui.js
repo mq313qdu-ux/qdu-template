@@ -1,4 +1,4 @@
-// End-to-end UI tests in jsdom against the real index.html + js, using demo/ data and mocked TTS.
+// End-to-end UI tests against production content and isolated quiz fixtures, with mocked TTS.
 const fs = require('fs'), path = require('path'), assert = require('assert');
 const { JSDOM } = require('jsdom');
 const ROOT = path.resolve(__dirname, '..');
@@ -6,14 +6,30 @@ const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]);
 const stripped = html.replace(/<script[^>]*src[^>]*><\/script>/g, '');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-let pass = 0; const t = async (n, f) => { try { await f(); pass++; console.log('  ✓', n); } catch (e) { console.error('  ✗', n, '\n   ', e.stack.split('\n').slice(0, 3).join('\n    ')); process.exitCode = 1; } };
+let pass = 0;
+const openWindows = new Set();
+const t = async (n, f) => {
+  try { await f(); pass++; console.log('  ✓', n); }
+  catch (e) { console.error('  ✗', n, '\n   ', e.stack.split('\n').slice(0, 3).join('\n    ')); process.exitCode = 1; }
+  finally { for (const w of openWindows) w.close(); openWindows.clear(); }
+};
 
-async function open(query, store, voices) {
+async function open(query, store, voices, contentMode = 'fixture') {
   const dom = new JSDOM(stripped, { url: 'http://localhost/repoX/' + (query || ''), runScripts: 'outside-only', pretendToBeVisual: true });
   const w = dom.window; w.__errors = [];
+  openWindows.add(w);
+  w.HTMLCanvasElement.prototype.getContext = () => null;
   w.addEventListener('error', (e) => w.__errors.push(e.message));
   if (store) for (const [k, v] of Object.entries(store)) w.localStorage.setItem(k, v);
-  w.fetch = async (u) => { const p = path.join(ROOT, u.split('?')[0]); return fs.existsSync(p) ? { status: 200, ok: true, json: async () => JSON.parse(fs.readFileSync(p, 'utf8')) } : { status: 404, ok: false }; };
+  w.fetch = async (u) => {
+    let file = u.split('?')[0];
+    if (file.startsWith('data/')) {
+      if (contentMode === 'empty') return { status: 404, ok: false };
+      if (contentMode === 'fixture') file = 'tools/fixtures/quiz/' + file.slice(5);
+    }
+    const p = path.join(ROOT, file);
+    return fs.existsSync(p) ? { status: 200, ok: true, json: async () => JSON.parse(fs.readFileSync(p, 'utf8')) } : { status: 404, ok: false };
+  };
   const st = w.document.createElement('style'); st.textContent = fs.readFileSync(path.join(ROOT, 'css/theme.css'), 'utf8') + fs.readFileSync(path.join(ROOT, 'css/app.css'), 'utf8'); w.document.head.appendChild(st);
   w.scrollTo = () => {}; w.HTMLElement.prototype.scrollIntoView = () => {};
   w.__spoken = [];
@@ -42,23 +58,57 @@ const ansIdx = (p, i) => p.click(p.$$('.option-btn')[i]);
 const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
 
 (async () => {
-  console.log('empty template (production data, no demo)');
-  await t('graceful empty state, no errors, demo link offered', async () => {
-    const p = await open('');
-    assert.ok(p.$('#view').textContent.includes('لا توجد محاضرات بعد')); assert.ok(p.$('#view a[href="?demo=1"]')); assert.equal(p.w.__errors.length, 0);
-    assert.equal(p.$$('.lecture-card').length, 0); assert.ok(!p.$('#demoBanner').textContent);
+  console.log('empty content');
+  await t('graceful empty state without a demo link', async () => {
+    const p = await open('', null, null, 'empty');
+    assert.ok(p.$('#view').textContent.includes('لا توجد محاضرات بعد')); assert.ok(!p.$('#view a[href="?demo=1"]')); assert.equal(p.w.__errors.length, 0);
+    assert.equal(p.$$('.lecture-card').length, 0); assert.ok(!p.$('#demoBanner'));
     for (const pg of ['favorites', 'mistakes', 'incomplete', 'history', 'achievements']) { p.w.location.hash = '#/' + pg; await p.sleep(10); assert.ok(p.$('#view').textContent.length > 10, pg); }
     assert.equal(p.w.__errors.length, 0);
   });
-  await t('demo disabled in production when allowDemo=false is honored (query ignored)', async () => {
-    const cfg = path.join(ROOT, 'site.config.json'), orig = fs.readFileSync(cfg, 'utf8'); fs.writeFileSync(cfg, JSON.stringify({ ...JSON.parse(orig), allowDemo: false }));
-    try { const p = await open('?demo=1'); assert.ok(p.$('#view').textContent.includes('لا توجد محاضرات')); assert.ok(!p.$('#view a[href="?demo=1"]')); } finally { fs.writeFileSync(cfg, orig); }
+  await t('old demo query always loads the real subject, all lectures, and production storage', async () => {
+    const p = await open('?demo=1', null, null, 'production');
+    assert.equal(p.$('#subjectName').textContent, 'التصوير الشعاعي');
+    assert.equal(p.$('#authorName').textContent, 'مقتدى الكناني');
+    assert.equal(p.$$('.lecture-card').length, 4);
+    assert.deepEqual(p.$$('.lecture-meta').map(x => x.textContent), ['24 سؤال', '50 سؤال', '26 سؤال', '57 سؤال']);
+    assert.equal(p.w.QDU.App.content.questions.length, 157);
+    assert.ok(!p.$('#demoBanner'));
+    assert.ok(!fs.existsSync(path.join(ROOT, 'demo')));
+    assert.ok(Object.keys(p.storeDump())[0].endsWith('::radiographic-imaging'));
+    p.w.close();
+  });
+  await t('every production question renders unchanged originals, full translation, wrong-answer explanation and reasoning', async () => {
+    const p = await open('', null, null, 'production');
+    const content = p.w.QDU.App.content;
+    for (const q of content.questions) {
+      const s = p.w.QDU.core.newSession(content, 'lecture', q.lectureId, [q.id], Date.now(), content.lectureById.get(q.lectureId).title);
+      p.state().sessions[s.id] = s;
+      p.state().settings.translate = 'both';
+      p.w.QDU.Quiz.view(s.id);
+      assert.equal(p.$('.q-text').textContent.trim(), '1. ' + q.text, q.id);
+      assert.equal(p.$$('.option-btn').length, q.options.length, q.id);
+      assert.deepEqual(p.$$('.opt-main > span:last-child').map(x => x.textContent), Array.from(q.options), q.id);
+      const en = content.enrichment.get(q.id);
+      assert.equal(p.$('.translation').textContent, en.translation.q, q.id);
+      assert.deepEqual(p.$$('.opt-tr').map(x => x.textContent), Array.from(en.translation.options), q.id);
+      assert.ok(en.explanation && /[\u0600-\u06ff]/.test(en.explanation), q.id);
+      ansIdx(p, (q.correct + 1) % q.options.length);
+      assert.ok(p.$('.feedback-box').textContent.includes(en.explanation), q.id);
+      assert.ok(p.$$('.option-btn')[q.correct].classList.contains('correct'), q.id);
+      p.act('qWhy');
+      assert.equal(p.$$('.why-box li').length, q.options.length - 1, q.id);
+      p.w.QDU.Quiz.leave();
+      delete p.state().sessions[s.id];
+    }
+    assert.equal(p.w.__errors.length, 0);
+    p.w.close();
   });
 
   console.log('demo: home');
-  await t('2 lecture cards with dynamic counts, coverage 0, banner shown', async () => {
+  await t('fixture lecture cards have dynamic counts and zero initial coverage', async () => {
     const p = await open('?demo=1'); assert.equal(p.$$('.lecture-card').length, 2); assert.ok(p.$$('.lecture-meta')[0].textContent.includes('3 سؤال'));
-    assert.ok(p.$('#demoBanner').textContent.includes('Demo')); assert.ok(p.$('.lecture-card').textContent.includes('0%')); assert.equal(p.w.__errors.length, 0);
+    assert.ok(!p.$('#demoBanner')); assert.ok(p.$('.lecture-card').textContent.includes('0%')); assert.equal(p.w.__errors.length, 0);
     assert.ok(p.$('#subjectName').textContent.includes('Demo'));
   });
 
@@ -131,7 +181,10 @@ const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
   await t('full run → results (score, %, correct/wrong/total, duration, rating, review)', async () => {
     const p = await open('?demo=1'); await startLec(p, 1); ansIdx(p, 2); await p.sleep(750); ansIdx(p, 0); p.act('qNext'); ansIdx(p, 1); await p.sleep(750);
     assert.ok(p.w.location.hash.startsWith('#/results/')); const txt = p.$('#view').textContent;
-    assert.ok(txt.includes('2 / 3')); assert.ok(txt.includes('ناجح')); await p.sleep(1500); assert.equal(p.$('#finalScore').textContent, '67%'); assert.equal(p.$('#rc').textContent, '2'); assert.equal(p.$('#rw').textContent, '1'); assert.equal(p.$('#rt').textContent, '3');
+    assert.ok(txt.includes('2 / 3')); assert.ok(txt.includes('ناجح'));
+    const scoreDeadline = Date.now() + 5000;
+    while (p.$('#finalScore').textContent !== '67%' && Date.now() < scoreDeadline) await p.sleep(50);
+    assert.equal(p.$('#finalScore').textContent, '67%'); assert.equal(p.$('#rc').textContent, '2'); assert.equal(p.$('#rw').textContent, '1'); assert.equal(p.$('#rt').textContent, '3');
     assert.equal(p.state().attempts.length, 1); assert.equal(Object.keys(p.state().sessions).length, 0); assert.ok(p.$('.results-meta').textContent.includes('⏱'));
     p.act('toggleReview'); assert.equal(p.$$('.review-q').length, 3); assert.equal(p.$$('.review-q.no').length, 1); assert.ok(p.$('.review-q.no .ex').textContent.length > 10);
     p.w.location.reload = () => {}; fin = p.storeDump();
@@ -267,8 +320,8 @@ const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
   });
   await t('header, title and top nav are visible ONLY on home (really hidden by CSS, not just by class)', async () => {
     const p = await open('?demo=1'); const vis = (sel) => p.w.getComputedStyle(p.$(sel)).display !== 'none';
-    assert.ok(vis('.header') && vis('#nav') && vis('#demoBanner') === true);
-    await startLec(p, 1); assert.ok(!vis('.header')); assert.ok(!vis('#nav')); assert.ok(!vis('#demoBanner'));
+    assert.ok(vis('.header') && vis('#nav')); assert.ok(!p.$('#demoBanner'));
+    await startLec(p, 1); assert.ok(!vis('.header')); assert.ok(!vis('#nav'));
     ansIdx(p, 2); await p.sleep(750); ansIdx(p, 2); p.act('qNext'); ansIdx(p, 1); await p.sleep(750); assert.ok(p.w.location.hash.startsWith('#/results')); assert.ok(!vis('.header')); assert.ok(!vis('#nav'));
     p.w.location.hash = '#/'; await p.sleep(20); assert.ok(vis('.header') && vis('#nav'));
     p.w.location.hash = '#/history'; await p.sleep(20); assert.ok(vis('#nav')); assert.ok(!vis('.header'));
@@ -292,7 +345,7 @@ const CORRECT = { 'demo-l1': [2, 2, 1], 'demo-l2': [1, 3, 2] };
     const p = await open('?demo=1'); p.click(p.$('#fullscreenToggle')); assert.ok(p.$('#app').classList.contains('study-mode')); p.click(p.$('#fullscreenToggle')); assert.ok(!p.$('#app').classList.contains('study-mode'));
     assert.equal(p.$('#input').checked, false); p.$('#input').checked = true; p.$('#input').dispatchEvent(new p.w.Event('change', { bubbles: true })); assert.ok(p.$('#app').classList.contains('dark-mode')); const k = Object.keys(p.storeDump()); assert.equal(k.length, 1); assert.ok(k[0].includes('localhost/repoX') && k[0].includes('demo') && k[0].endsWith('demo'), k[0]);
     const q = await open('?demo=1', p.storeDump()); assert.ok(q.$('#app').classList.contains('dark-mode')); assert.equal(q.$('#input').checked, true, 'switch reflects saved theme');
-    const prod = await open('', p.storeDump()); assert.ok(!prod.$('#app').classList.contains('dark-mode'), 'prod namespace separate from demo');
+    const prod = await open('', p.storeDump(), null, 'production'); assert.ok(!prod.$('#app').classList.contains('dark-mode'), 'production namespace separate from fixture');
   });
   await t('no console errors across run; no external SDK scripts or absolute asset paths', async () => {
     assert.ok(!/_sdk|cdn\.tailwindcss/.test(html)); assert.ok(!/(src|href)="\//.test(html));

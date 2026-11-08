@@ -63,8 +63,7 @@
   function homePage() {
     const { state: st, content: c } = App, sk = C.streaks(st, Date.now());
     if (!c.lectures.length) {
-      const demoLink = App.site.allowDemo && !App.demo ? `<p><a class="btn primary" href="?demo=1">تجربة بيانات Demo</a></p>` : '';
-      return emptyState('📭', 'لا توجد محاضرات بعد', 'لم تُضف أي محاضرات لهذه المادة. أضف المحتوى في الملفات <code>data/subject.json</code> و <code>data/lectures.json</code> و <code>data/questions.json</code> وسيظهر هنا تلقائيًا دون تعديل الكود.', demoLink);
+      return emptyState('📭', 'لا توجد محاضرات بعد', 'لم تُضف محاضرات لهذه المادة بعد.');
     }
     const distinct = Object.keys(st.latest).length;
     const strip = `<div class="stats-strip">
@@ -194,10 +193,9 @@
 
   /* ---------- boot ---------- */
   async function boot() {
-    let site = { platformTitle: 'منصة QDU للاختبار التفاعلي', dataPath: 'data/', demoPath: 'demo/', allowDemo: true, repoId: '', protectContent: true };
+    let site = { platformTitle: 'منصة QDU للاختبار التفاعلي', dataPath: 'data/', repoId: '', protectContent: true };
     try { const r = await fetch('site.config.json', { cache: 'no-cache' }); if (r.ok) site = Object.assign(site, await r.json()); } catch (e) {}
     App.site = site;
-    App.demo = site.allowDemo && new URLSearchParams(location.search).get('demo') === '1';
     $('#view').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b && App.actions[b.dataset.act]) { e.preventDefault(); App.actions[b.dataset.act](b); } });
     $('#input').addEventListener('change', (e) => { App.state.settings.dark = e.target.checked; applyTheme(); App.save(); });
     // social links: on phones try the native app first, fall back to the web page if the app did not take over
@@ -214,7 +212,7 @@
     document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) $('#app').classList.remove('study-mode'); });
 
     let content;
-    try { content = await QDU.Loader.loadContent(App.demo ? site.demoPath : site.dataPath); }
+    try { content = await QDU.Loader.loadContent(site.dataPath); }
     catch (e) {
       const why = e.kind === 'network' && location.protocol === 'file:' ? 'لا يمكن قراءة ملفات JSON عند فتح الصفحة مباشرة من القرص (file://). شغّل الموقع عبر خادم محلي أو GitHub Pages، مثال: <code>python -m http.server</code>'
         : e.kind === 'parse' ? 'ملف JSON غير صالح: <code>' + esc(e.url) + '</code>' : 'تعذّر الوصول إلى الملفات. تحقق من الاتصال والمسارات.';
@@ -226,9 +224,7 @@
     if (subj.name) { const el = $('#subjectName'); el.textContent = subj.name; el.classList.remove('hidden'); }
     if (subj.author) { $('#authorName').textContent = subj.author; $('#authorLine').classList.remove('hidden'); }
     document.title = (subj.name ? subj.name + ' — ' : '') + title;
-    if (App.demo) { const b = $('#demoBanner'); b.innerHTML = 'وضع Demo — بيانات تجريبية للاختبار فقط · <a href="./">الخروج من Demo</a>'; b.classList.remove('hidden'); }
-
-    const store = (App.store = S.createStore(S.storageKey(S.deriveRepoId(site.repoId), subj.id, App.demo)));
+    const store = (App.store = S.createStore(S.storageKey(S.deriveRepoId(site.repoId), subj.id)));
     App.state = store.state;
     C.reconcile(App.state, content); App.state.meta.contentVersion = subj.contentVersion; App.save();
     applyTheme();

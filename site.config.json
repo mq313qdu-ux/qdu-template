@@ -1,8 +1,6 @@
 {
   "platformTitle": "منصة QDU للاختبار التفاعلي",
   "dataPath": "data/",
-  "demoPath": "demo/",
-  "allowDemo": true,
   "repoId": "",
   "protectContent": true
 }

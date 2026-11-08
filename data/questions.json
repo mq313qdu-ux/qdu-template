@@ -1,1 +1,1862 @@
-[]
+[
+  {
+    "id": "rad-l1-q001",
+    "lectureId": "rad-l1",
+    "text": "The area between eyebrows is:",
+    "options": [
+      "Outer canthus of eye",
+      "Glabella",
+      "EAM",
+      "Inion",
+      "Vertex"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q002",
+    "lectureId": "rad-l1",
+    "text": "The plane which divides the skull into right and left halves is:",
+    "options": [
+      "Coronal plane",
+      "Mid-sagittal plane",
+      "Anthropological plane",
+      "Auricular plane",
+      "None of the above"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q003",
+    "lectureId": "rad-l1",
+    "text": "What does EAM stand for?",
+    "options": [
+      "External Angular Mandible",
+      "Ear Axial Midline",
+      "External Auditory Meatus",
+      "External Articular Margin"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l1-q004",
+    "lectureId": "rad-l1",
+    "text": "What does MSP stand for?",
+    "options": [
+      "Median Superior Plane",
+      "Mid-Sagittal Plane",
+      "Middle Skull Projection",
+      "Mandibular Sagittal Plane"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q005",
+    "lectureId": "rad-l1",
+    "text": "The Mid-Sagittal Plane (MSP) divides the body into:",
+    "options": [
+      "Anterior and posterior halves",
+      "Superior and inferior halves",
+      "Right and left halves",
+      "Upper and lower quarters"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l1-q006",
+    "lectureId": "rad-l1",
+    "text": "The Glabella is located:",
+    "options": [
+      "At the tip of the nose",
+      "Between the eyebrows",
+      "Above the chin",
+      "At the external auditory meatus"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q007",
+    "lectureId": "rad-l1",
+    "text": "The Nasion is:",
+    "options": [
+      "The upper depression of the nose",
+      "The area between the eyebrows",
+      "The midpoint of the chin",
+      "The external auditory meatus"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l1-q008",
+    "lectureId": "rad-l1",
+    "text": "The Acanthion is located:",
+    "options": [
+      "Between the eyebrows",
+      "Between the upper lip and the nose",
+      "Above the ear",
+      "At the chin"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q009",
+    "lectureId": "rad-l1",
+    "text": "The Mental point is located:",
+    "options": [
+      "At the forehead",
+      "At the nose",
+      "Over the chin (mentum)",
+      "At the external auditory meatus"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l1-q010",
+    "lectureId": "rad-l1",
+    "text": "What does EAM stand for?",
+    "options": [
+      "External Auditory Meatus",
+      "Emergency Airway Management",
+      "Eye Angle Measurement",
+      "Extra Articular Mandible"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l1-q011",
+    "lectureId": "rad-l1",
+    "text": "What does IPL stand for?",
+    "options": [
+      "Internal Projection Line",
+      "Inter-Pupillary Line",
+      "Inferior Positioning Line",
+      "Internal Petrous Line"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q012",
+    "lectureId": "rad-l1",
+    "text": "The Inter-Pupillary Line (IPL) connects:",
+    "options": [
+      "The two ears",
+      "The two pupils of the eyes",
+      "The nose and the chin",
+      "The glabella and the EAM"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q013",
+    "lectureId": "rad-l1",
+    "text": "Why is the EAM important in skull positioning?",
+    "options": [
+      "It determines the exposure time",
+      "It is a common reference point for skull positioning lines",
+      "It determines the IR size",
+      "It replaces the centering point"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q014",
+    "lectureId": "rad-l1",
+    "text": "What two points form the Glabello-Meatal Line (GML)?",
+    "options": [
+      "Glabella and EAM",
+      "Orbit and EAM",
+      "Acanthion and EAM",
+      "Mental point and EAM"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l1-q015",
+    "lectureId": "rad-l1",
+    "text": "What two points form the Orbito-Meatal Line (OML)?",
+    "options": [
+      "Glabella and EAM",
+      "Orbit and EAM",
+      "Acanthion and EAM",
+      "Mental point and EAM"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q016",
+    "lectureId": "rad-l1",
+    "text": "What two points form the Acanthio-Meatal Line (AML)?",
+    "options": [
+      "Glabella and EAM",
+      "Orbit and EAM",
+      "Acanthion and EAM",
+      "Mental point and EAM"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l1-q017",
+    "lectureId": "rad-l1",
+    "text": "What two points form the Mento-Meatal Line (MML)?",
+    "options": [
+      "Glabella and EAM",
+      "Orbit and EAM",
+      "Acanthion and EAM",
+      "Mental point and EAM"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l1-q018",
+    "lectureId": "rad-l1",
+    "text": "Which line connects the Glabella to the EAM?",
+    "options": [
+      "OML",
+      "AML",
+      "GML",
+      "MML"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l1-q019",
+    "lectureId": "rad-l1",
+    "text": "Which line connects the Acanthion to the EAM?",
+    "options": [
+      "AML",
+      "OML",
+      "GML",
+      "MML"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l1-q020",
+    "lectureId": "rad-l1",
+    "text": "Which line connects the Mental point to the EAM?",
+    "options": [
+      "GML",
+      "AML",
+      "MML",
+      "IPL"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l1-q021",
+    "lectureId": "rad-l1",
+    "text": "Acanthion lies between upper lips and nose:",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l1-q022",
+    "lectureId": "rad-l1",
+    "text": "True or False: The MSP divides the body into anterior and posterior halves.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l1-q023",
+    "lectureId": "rad-l1",
+    "text": "True or False: Skull positioning lines are formed by connecting facial landmarks to the EAM.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l1-q024",
+    "lectureId": "rad-l1",
+    "text": "True or False: The Nasion is the area between the eyebrows.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q025",
+    "lectureId": "rad-l2",
+    "text": "For skull AP:",
+    "options": [
+      "Mento-Meatal line is parallel to IR",
+      "Mento-Meatal line is perpendicular to IR",
+      "Orbito-Meatal line is perpendicular to IR",
+      "Orbito-Meatal line is parallel to IR",
+      "To visualize posterior skull"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q026",
+    "lectureId": "rad-l2",
+    "text": "Horizontal direction of X-ray for erect patient in:",
+    "options": [
+      "Caldwell projection",
+      "Towne projection",
+      "Submento-Vertex projection",
+      "All of the above",
+      "None of the above"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q027",
+    "lectureId": "rad-l2",
+    "text": "The direction of X-ray for Towne's projection is:",
+    "options": [
+      "30° Caudal",
+      "Vertical",
+      "Horizontal",
+      "30° Cranial",
+      "None of the above"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l2-q028",
+    "lectureId": "rad-l2",
+    "text": "What is the patient position for Skull AP projection?",
+    "options": [
+      "OML parallel to IR",
+      "OML perpendicular to IR",
+      "IPL parallel to IR",
+      "MML perpendicular to IR"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q029",
+    "lectureId": "rad-l2",
+    "text": "What is the direction of X-ray in Skull AP projection?",
+    "options": [
+      "Horizontal",
+      "30° caudal",
+      "Vertical",
+      "30° cranial"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q030",
+    "lectureId": "rad-l2",
+    "text": "What is the centering point for Skull AP projection?",
+    "options": [
+      "Glabella",
+      "Nasion",
+      "Acanthion",
+      "Mental point"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q031",
+    "lectureId": "rad-l2",
+    "text": "What is the SID for Skull AP projection?",
+    "options": [
+      "80 cm",
+      "90 cm",
+      "100 cm",
+      "150 cm"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q032",
+    "lectureId": "rad-l2",
+    "text": "What is the IR size for Skull AP projection?",
+    "options": [
+      "18 × 24 cm",
+      "24 × 30 cm",
+      "30 × 40 cm",
+      "35 × 43 cm"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q033",
+    "lectureId": "rad-l2",
+    "text": "What is the kVp for Skull AP projection?",
+    "options": [
+      "60 kVp",
+      "65 kVp",
+      "75 kVp",
+      "90 kVp"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q034",
+    "lectureId": "rad-l2",
+    "text": "What is the mAs range for Skull AP projection?",
+    "options": [
+      "5–10 mAs",
+      "8–10 mAs",
+      "10–20 mAs",
+      "20–25 mAs"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q035",
+    "lectureId": "rad-l2",
+    "text": "What is the collimation for Skull AP projection?",
+    "options": [
+      "Sinus cavities",
+      "Mandible",
+      "Outer margins of skull",
+      "TMJ only"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q036",
+    "lectureId": "rad-l2",
+    "text": "What structures are shown in Skull AP projection?",
+    "options": [
+      "Skull base only",
+      "Posterior skull only",
+      "AP view of the whole skull",
+      "Nasal bones only"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q037",
+    "lectureId": "rad-l2",
+    "text": "The Towne projection is also known as:",
+    "options": [
+      "PA Axial",
+      "AP Axial",
+      "Lateral Oblique",
+      "Submento-Vertex"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q038",
+    "lectureId": "rad-l2",
+    "text": "What is the patient position for Towne projection?",
+    "options": [
+      "OML perpendicular to IR",
+      "OML parallel to IR",
+      "IPL parallel to IR",
+      "MML perpendicular to IR"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l2-q039",
+    "lectureId": "rad-l2",
+    "text": "What is the direction of X-ray for Towne projection?",
+    "options": [
+      "30° cranial",
+      "Horizontal",
+      "Vertical",
+      "30° caudal"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l2-q040",
+    "lectureId": "rad-l2",
+    "text": "The X-ray beam in Towne projection is angled:",
+    "options": [
+      "15° caudal to OML",
+      "30° caudal to OML",
+      "30° cranial to OML",
+      "45° caudal to OML"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q041",
+    "lectureId": "rad-l2",
+    "text": "What is the centering point for Towne projection?",
+    "options": [
+      "Nasion",
+      "4 cm above EAM",
+      "6 cm above Glabella",
+      "Acanthion"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q042",
+    "lectureId": "rad-l2",
+    "text": "What structures are shown in Towne projection?",
+    "options": [
+      "Nasal bones",
+      "Posterior skull",
+      "Maxillary sinuses only",
+      "Mandibular body only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q043",
+    "lectureId": "rad-l2",
+    "text": "What is the kVp range for Towne projection?",
+    "options": [
+      "60–70 kVp",
+      "70–80 kVp",
+      "75–80 kVp",
+      "90–100 kVp"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l2-q044",
+    "lectureId": "rad-l2",
+    "text": "What is the mAs range for Towne projection?",
+    "options": [
+      "5–10 mAs",
+      "8–10 mAs",
+      "10–20 mAs",
+      "30–35 mAs"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q045",
+    "lectureId": "rad-l2",
+    "text": "What are the SID and IR size for Towne projection?",
+    "options": [
+      "100 cm and 24 × 30 cm",
+      "100 cm and 18 × 24 cm",
+      "150 cm and 24 × 30 cm",
+      "90 cm and 18 × 24 cm"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l2-q046",
+    "lectureId": "rad-l2",
+    "text": "Which line must be perpendicular to IR in Skull Lateral projection?",
+    "options": [
+      "OML",
+      "MML",
+      "IPL",
+      "AML"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q047",
+    "lectureId": "rad-l2",
+    "text": "What is the direction of X-ray in Skull Lateral projection?",
+    "options": [
+      "Vertical",
+      "Horizontal",
+      "30° caudal",
+      "15° cranial"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q048",
+    "lectureId": "rad-l2",
+    "text": "What is the centering point for Skull Lateral projection?",
+    "options": [
+      "Nasion",
+      "4 cm above EAM",
+      "5 cm above EAM",
+      "6 cm above Glabella"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q049",
+    "lectureId": "rad-l2",
+    "text": "What is the SID for Skull Lateral projection?",
+    "options": [
+      "75 cm",
+      "90 cm",
+      "100 cm",
+      "150 cm"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q050",
+    "lectureId": "rad-l2",
+    "text": "What is the IR size for Skull Lateral projection?",
+    "options": [
+      "18 × 24 cm",
+      "24 × 30 cm",
+      "30 × 40 cm",
+      "35 × 43 cm"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q051",
+    "lectureId": "rad-l2",
+    "text": "What is the kVp range for Skull Lateral projection?",
+    "options": [
+      "50–60 kVp",
+      "60–70 kVp",
+      "75–80 kVp",
+      "80–90 kVp"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q052",
+    "lectureId": "rad-l2",
+    "text": "What is the mAs range for Skull Lateral projection?",
+    "options": [
+      "5–10 mAs",
+      "8–10 mAs",
+      "10–20 mAs",
+      "20–25 mAs"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q053",
+    "lectureId": "rad-l2",
+    "text": "What structures are demonstrated in Skull Lateral projection?",
+    "options": [
+      "Skull base only",
+      "Lateral view of the whole skull",
+      "Posterior skull only",
+      "Mandible only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q054",
+    "lectureId": "rad-l2",
+    "text": "What is the collimation for Skull Lateral projection?",
+    "options": [
+      "Sinus cavities",
+      "Outer margins of skull",
+      "Nasal bones only",
+      "Mandible only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q055",
+    "lectureId": "rad-l2",
+    "text": "Why do we collimate to the outer margins of the skull?",
+    "options": [
+      "To increase unnecessary radiation exposure",
+      "To include the required skull anatomy and reduce unnecessary irradiation and scatter",
+      "To increase the IR size",
+      "To change the X-ray beam direction"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q056",
+    "lectureId": "rad-l2",
+    "text": "What does SMV stand for?",
+    "options": [
+      "Superior Mandibular View",
+      "Submento-Vertex",
+      "Sagittal Meatal View",
+      "Standard Maxillary View"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q057",
+    "lectureId": "rad-l2",
+    "text": "What is the patient position for SMV projection?",
+    "options": [
+      "OML perpendicular to IR",
+      "OML parallel to IR",
+      "IPL perpendicular to IR",
+      "MML perpendicular to IR"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q058",
+    "lectureId": "rad-l2",
+    "text": "What is the direction of X-ray in SMV projection?",
+    "options": [
+      "Vertical",
+      "Horizontal",
+      "30° cranial",
+      "30° caudal"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q059",
+    "lectureId": "rad-l2",
+    "text": "Where is the centering point for SMV projection?",
+    "options": [
+      "Nasion",
+      "4 cm above EAM",
+      "Midway between the angles of the mandible",
+      "6 cm above Glabella"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q060",
+    "lectureId": "rad-l2",
+    "text": "In SMV projection, the central X-ray beam is directed:",
+    "options": [
+      "Parallel to the OML",
+      "Perpendicular to the OML",
+      "Parallel to the IPL",
+      "30° cranial to the OML"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q061",
+    "lectureId": "rad-l2",
+    "text": "What structures are demonstrated in SMV projection?",
+    "options": [
+      "Posterior skull only",
+      "Skull base",
+      "Nasal bones only",
+      "Frontal sinuses only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q062",
+    "lectureId": "rad-l2",
+    "text": "What is the SID for SMV projection?",
+    "options": [
+      "75 cm",
+      "90 cm",
+      "100 cm",
+      "150 cm"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q063",
+    "lectureId": "rad-l2",
+    "text": "What is the IR size for SMV projection?",
+    "options": [
+      "18 × 24 cm",
+      "24 × 30 cm",
+      "30 × 40 cm",
+      "35 × 43 cm"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q064",
+    "lectureId": "rad-l2",
+    "text": "What is the kVp range for SMV projection?",
+    "options": [
+      "60–70 kVp",
+      "65–70 kVp",
+      "75–80 kVp",
+      "90–100 kVp"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q065",
+    "lectureId": "rad-l2",
+    "text": "What is the mAs range for SMV projection?",
+    "options": [
+      "5–10 mAs",
+      "8–10 mAs",
+      "10–20 mAs",
+      "20–25 mAs"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l2-q066",
+    "lectureId": "rad-l2",
+    "text": "What is the SID used for all four skull projections in our lectures?",
+    "options": [
+      "80 cm",
+      "90 cm",
+      "100 cm",
+      "150 cm"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q067",
+    "lectureId": "rad-l2",
+    "text": "What is the IR size used for Skull AP, Towne, Lateral and SMV?",
+    "options": [
+      "18 × 24 cm",
+      "24 × 30 cm",
+      "30 × 40 cm",
+      "35 × 43 cm"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q068",
+    "lectureId": "rad-l2",
+    "text": "Which skull projection uses 75–80 kVp and 20–25 mAs?",
+    "options": [
+      "AP",
+      "Towne",
+      "Skull Lateral",
+      "SMV"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l2-q069",
+    "lectureId": "rad-l2",
+    "text": "Horizontal direction of X-ray for an erect patient is used in which of the following?",
+    "options": [
+      "Caldwell projection",
+      "Towne projection",
+      "Submento-Vertex projection",
+      "All of the above"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l2-q070",
+    "lectureId": "rad-l2",
+    "text": "For Skull lateral projection, kVp range is 60–70:",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l2-q071",
+    "lectureId": "rad-l2",
+    "text": "IR size for skull lateral projection is 24 × 30 cm:",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l2-q072",
+    "lectureId": "rad-l2",
+    "text": "True or False: In Skull AP projection, the OML is parallel to the IR.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q073",
+    "lectureId": "rad-l2",
+    "text": "True or False: The centering point for Skull AP is the Glabella.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l2-q074",
+    "lectureId": "rad-l2",
+    "text": "True or False: The Towne projection uses 30° cranial angulation.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q075",
+    "lectureId": "rad-l3",
+    "text": "Patient with nasal trauma, the best mAs for the projection you will perform is:",
+    "options": [
+      "5–10",
+      "20–25",
+      "30–35",
+      "60–70",
+      "100"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l3-q076",
+    "lectureId": "rad-l3",
+    "text": "Centering point for lateral projection of nasal bone is:",
+    "options": [
+      "Acanthion",
+      "4 cm above nasion",
+      "4 cm above EAM",
+      "1 cm below nasion",
+      "1 cm below acanthion"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l3-q077",
+    "lectureId": "rad-l3",
+    "text": "The Occipito-Mental (OM) projection is also known as:",
+    "options": [
+      "Towne projection",
+      "Waters projection",
+      "Caldwell projection",
+      "Submento-Vertex projection"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q078",
+    "lectureId": "rad-l3",
+    "text": "What is the patient position for Waters projection?",
+    "options": [
+      "OML perpendicular to IR",
+      "MML perpendicular to IR",
+      "IPL perpendicular to IR",
+      "OML parallel to IR"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q079",
+    "lectureId": "rad-l3",
+    "text": "What is the direction of X-ray in Waters projection?",
+    "options": [
+      "Vertical",
+      "15° caudal",
+      "Horizontal",
+      "30° cranial"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q080",
+    "lectureId": "rad-l3",
+    "text": "What is the centering point for Waters projection?",
+    "options": [
+      "Nasion",
+      "Glabella",
+      "Acanthion",
+      "4 cm above EAM"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q081",
+    "lectureId": "rad-l3",
+    "text": "What are the exposure factors for Waters projection?",
+    "options": [
+      "60–70 kVp and 5–10 mAs",
+      "75–80 kVp and 20–25 mAs",
+      "70–80 kVp and 10–20 mAs",
+      "65 kVp and 16 mAs"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q082",
+    "lectureId": "rad-l3",
+    "text": "What is the IR size for Waters projection?",
+    "options": [
+      "24 × 30 cm",
+      "18 × 24 cm",
+      "30 × 40 cm",
+      "35 × 43 cm"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q083",
+    "lectureId": "rad-l3",
+    "text": "What structures are shown in Waters projection?",
+    "options": [
+      "Skull base only",
+      "Posterior skull only",
+      "Sinuses and facial bones",
+      "Mandible only"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q084",
+    "lectureId": "rad-l3",
+    "text": "Which line is perpendicular to IR in Sinuses & Facial Bones Lateral projection?",
+    "options": [
+      "Orbito-Meatal Line (OML)",
+      "Mento-Meatal Line (MML)",
+      "Inter-Pupillary Line (IPL)",
+      "Acanthio-Meatal Line (AML)"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q085",
+    "lectureId": "rad-l3",
+    "text": "What is the direction of X-ray in Sinuses & Facial Bones Lateral projection?",
+    "options": [
+      "Horizontal",
+      "Vertical",
+      "15° caudal",
+      "30° cranial"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l3-q086",
+    "lectureId": "rad-l3",
+    "text": "What is the centering point for Sinuses & Facial Bones Lateral projection?",
+    "options": [
+      "Nasion",
+      "Acanthion",
+      "Midway between eye and EAM",
+      "5 cm above EAM"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q087",
+    "lectureId": "rad-l3",
+    "text": "What are the exposure factors for Sinuses & Facial Bones Lateral projection?",
+    "options": [
+      "60–70 kVp and 5–10 mAs",
+      "70–80 kVp and 20–25 mAs",
+      "75 kVp and 8–10 mAs",
+      "65 kVp and 16 mAs"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q088",
+    "lectureId": "rad-l3",
+    "text": "Which projection is the PA Axial view of the sinuses and facial bones?",
+    "options": [
+      "Waters projection",
+      "Caldwell projection",
+      "Towne projection",
+      "SMV projection"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q089",
+    "lectureId": "rad-l3",
+    "text": "What is the patient position for Caldwell projection?",
+    "options": [
+      "OML parallel to IR",
+      "IPL perpendicular to IR",
+      "OML perpendicular to IR",
+      "MML perpendicular to IR"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q090",
+    "lectureId": "rad-l3",
+    "text": "What is the direction of X-ray for Caldwell projection?",
+    "options": [
+      "30° caudal",
+      "Horizontal",
+      "15° caudal",
+      "30° cranial"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q091",
+    "lectureId": "rad-l3",
+    "text": "What is the centering point for Caldwell projection?",
+    "options": [
+      "Acanthion",
+      "Nasion",
+      "4 cm above EAM",
+      "6 cm above Glabella"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q092",
+    "lectureId": "rad-l3",
+    "text": "What are the exposure factors for Caldwell projection?",
+    "options": [
+      "70–80 kVp and 20–25 mAs",
+      "60–70 kVp and 5–10 mAs",
+      "75 kVp and 8–10 mAs",
+      "65 kVp and 16 mAs"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l3-q093",
+    "lectureId": "rad-l3",
+    "text": "What is the collimation for Waters, Sinuses Lateral, and Caldwell projections?",
+    "options": [
+      "Outer margins of skull",
+      "Mandible",
+      "Sinus cavities",
+      "Nasal bones only"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q094",
+    "lectureId": "rad-l3",
+    "text": "Which line is perpendicular to IR in Nasal Bone Lateral projection?",
+    "options": [
+      "OML",
+      "IPL",
+      "MML",
+      "AML"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q095",
+    "lectureId": "rad-l3",
+    "text": "What is the direction of X-ray in Nasal Bone Lateral projection?",
+    "options": [
+      "Horizontal",
+      "Vertical",
+      "15° caudal",
+      "30° cranial"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l3-q096",
+    "lectureId": "rad-l3",
+    "text": "What is the collimation for Nasal Bone Lateral projection?",
+    "options": [
+      "Outer margins of skull",
+      "Sinus cavities",
+      "5 cm of the nasal bones on all sides",
+      "Whole mandible"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l3-q097",
+    "lectureId": "rad-l3",
+    "text": "For lateral projection of sinuses and facial bones, IR size is 100 cm:",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l3-q098",
+    "lectureId": "rad-l3",
+    "text": "True or False: For Nasal Bone Lateral projection, the kVp range is 60–70.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l3-q099",
+    "lectureId": "rad-l3",
+    "text": "True or False: The IR size for Waters, Sinuses Lateral, Caldwell, and Nasal Bone Lateral projections is 18 × 24 cm.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l3-q100",
+    "lectureId": "rad-l3",
+    "text": "In Caldwell projection, the centering point is Acanthion.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q101",
+    "lectureId": "rad-l4",
+    "text": "Direction of X-ray for mandible lateral oblique projection is:",
+    "options": [
+      "Vertical with 30° caudal angulation",
+      "Vertical",
+      "Vertical with 30° cranial angulation",
+      "Horizontal",
+      "None of the above"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q102",
+    "lectureId": "rad-l4",
+    "text": "What should be checked before making an exposure?",
+    "options": [
+      "Only the nominal exposure factors",
+      "Only which image label to print",
+      "Correct patient alignment and stability",
+      "Only the cassette size, regardless of alignment"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q103",
+    "lectureId": "rad-l4",
+    "text": "What does “Symphysis menti” refer to?",
+    "options": [
+      "The mandibular angle",
+      "The external auditory meatus",
+      "The condylar neck",
+      "The mandibular symphysis at the chin"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q104",
+    "lectureId": "rad-l4",
+    "text": "Which reference line is used in Lateral Oblique positioning?",
+    "options": [
+      "Orbito-meatal line only",
+      "Inter-pupillary line",
+      "Mento-meatal line only",
+      "Glabello-meatal line only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q105",
+    "lectureId": "rad-l4",
+    "text": "How should the inter-pupillary line relate to the image receptor in this view?",
+    "options": [
+      "Perpendicular to the IR",
+      "Parallel to the IR",
+      "At 45° to the IR",
+      "It is not considered"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q106",
+    "lectureId": "rad-l4",
+    "text": "What is the purpose of the positioning sponge or pad?",
+    "options": [
+      "Increase the X-ray beam energy",
+      "Replace the image receptor",
+      "Change cranial angulation into caudal angulation",
+      "Maintain stability and reduce motion while supporting the patient"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q107",
+    "lectureId": "rad-l4",
+    "text": "Where was the cassette located relative to the sponge?",
+    "options": [
+      "Under the sponge",
+      "Behind the X-ray tube",
+      "Above the sponge",
+      "Outside the imaging table"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q108",
+    "lectureId": "rad-l4",
+    "text": "In the RIGHT mandible view, which side is near the cassette?",
+    "options": [
+      "Left side",
+      "Right side",
+      "Neither side; both are equally near",
+      "Only the forehead is near"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q109",
+    "lectureId": "rad-l4",
+    "text": "What does “cranial” mean?",
+    "options": [
+      "Toward the feet",
+      "Toward the head",
+      "Toward the left side",
+      "Toward the chest only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q110",
+    "lectureId": "rad-l4",
+    "text": "In that centering description, which mandibular angle is used?",
+    "options": [
+      "The angle nearest the cassette",
+      "Both angles equally",
+      "Neither mandibular angle",
+      "The angle remote from the cassette"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q111",
+    "lectureId": "rad-l4",
+    "text": "Which an indication for Lateral Oblique Mandible?",
+    "options": [
+      "Nasal septum deviation",
+      "Temporomandibular joint motion study only",
+      "Mandibular fracture",
+      "Maxillary sinus fluid levels"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q112",
+    "lectureId": "rad-l4",
+    "text": "Which specific fracture type among lateral oblique indications?",
+    "options": [
+      "Fracture of the nasal septum",
+      "Condylar fracture",
+      "Fracture of the zygomatic arch only",
+      "Fracture of the frontal sinus"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q113",
+    "lectureId": "rad-l4",
+    "text": "What does TMJ stand for?",
+    "options": [
+      "Temporo-Maxillary Junction",
+      "Trans-Mandibular Joint",
+      "Temporomandibular Joint",
+      "Temporal Meatal Junction"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q114",
+    "lectureId": "rad-l4",
+    "text": "What patient position is TMJ Lateral?",
+    "options": [
+      "Prone with the head facing down",
+      "AP standing without head alignment",
+      "Supine with the chin forced upward",
+      "True lateral"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q115",
+    "lectureId": "rad-l4",
+    "text": "What does “caudal” indicate?",
+    "options": [
+      "Toward the feet",
+      "Toward the head",
+      "Toward the ear",
+      "Toward the nose"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q116",
+    "lectureId": "rad-l4",
+    "text": "Which TWO mouth positions did she require for TMJ imaging?",
+    "options": [
+      "Open mouth and tongue out",
+      "Open mouth and closed mouth",
+      "Closed mouth and eyes closed",
+      "Biting hard and chewing"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q117",
+    "lectureId": "rad-l4",
+    "text": "Why are both open-mouth and closed-mouth TMJ views taken?",
+    "options": [
+      "To compare joint position and movement",
+      "To compare left and right exposure settings",
+      "To image the mandible without showing the joint",
+      "To measure the cassette distance"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q118",
+    "lectureId": "rad-l4",
+    "text": "Which problem mentioned can these TMJ views help evaluate?",
+    "options": [
+      "Appendicitis",
+      "Hip fracture",
+      "Kidney stone",
+      "Dislocation"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q119",
+    "lectureId": "rad-l4",
+    "text": "What are the four main parts of the mandible?",
+    "options": [
+      "Body, ramus, angle, condyle",
+      "Femur, tibia, fibula, patella",
+      "Phalanges, metatarsals, tarsals",
+      "Body, head, neck, tail"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q120",
+    "lectureId": "rad-l4",
+    "text": "The Angle of the mandible is located:",
+    "options": [
+      "At the junction of the body and ramus",
+      "At the nasion",
+      "At the mandibular condyle",
+      "At the external auditory meatus"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q121",
+    "lectureId": "rad-l4",
+    "text": "Where is the mandibular condyle located?",
+    "options": [
+      "At the inferior border of the mandibular body",
+      "At the superior posterior part of the ramus",
+      "At the nasal bone",
+      "At the anterior part of the chin"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q122",
+    "lectureId": "rad-l4",
+    "text": "What is the radiographic baseline for Mandible?",
+    "options": [
+      "Infra-orbitomeatal line",
+      "Canthus of eye to EAM",
+      "Nose to chin",
+      "Glabella to occiput"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q123",
+    "lectureId": "rad-l4",
+    "text": "The line extending from the eye canthus to EAM is related to:",
+    "options": [
+      "Orbito-Meatal Line (OML)",
+      "Mento-Meatal Line (MML)",
+      "Acanthio-Meatal Line (AML)",
+      "Glabello-Meatal Line (GML)"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q124",
+    "lectureId": "rad-l4",
+    "text": "Why can't we do a pure lateral mandible?",
+    "options": [
+      "Because both sides of the mandible superimpose - need oblique",
+      "Because the mandible is not visible",
+      "Because the skull base disappears",
+      "Because the IR size is too small"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q125",
+    "lectureId": "rad-l4",
+    "text": "Which projection helps separate the right and left sides of the mandible?",
+    "options": [
+      "Pure lateral without angulation",
+      "Lateral oblique projection",
+      "Skull AP projection",
+      "Waters projection"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q126",
+    "lectureId": "rad-l4",
+    "text": "The Reverse Towne's projection is commonly performed with:",
+    "options": [
+      "Mouth opened",
+      "Mouth always closed",
+      "Patient in pure lateral position",
+      "OML parallel to IR"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q127",
+    "lectureId": "rad-l4",
+    "text": "The Reverse Towne's projection is useful for evaluating:",
+    "options": [
+      "Medial and lateral displacement of condylar fractures",
+      "Nasal septum only",
+      "Maxillary sinuses only",
+      "Frontal bone only"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q128",
+    "lectureId": "rad-l4",
+    "text": "Which imaging technique provides more detailed assessment of mandibular condylar fractures?",
+    "options": [
+      "Skull AP radiography only",
+      "CT or CBCT",
+      "Nasal bone lateral",
+      "Skull SMV only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q129",
+    "lectureId": "rad-l4",
+    "text": "What does \"axiolateral oblique\" mean?",
+    "options": [
+      "A lateral oblique projection with axial X-ray beam angulation",
+      "A projection without any beam angulation",
+      "An AP projection with a horizontal beam",
+      "A projection used only for the nose"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q130",
+    "lectureId": "rad-l4",
+    "text": "Which structure should not superimpose the angle of the mandible on a lateral oblique?",
+    "options": [
+      "Cervical spine",
+      "Frontal sinus",
+      "Nasal septum",
+      "Orbit"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q131",
+    "lectureId": "rad-l4",
+    "text": "Which structure should have minimal superimposition on the mandibular body in an oblique?",
+    "options": [
+      "Frontal sinus",
+      "Hyoid bone",
+      "Nasal bone",
+      "Parietal bone"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q132",
+    "lectureId": "rad-l4",
+    "text": "What structure must not overlap the angle of mandible?",
+    "options": [
+      "Cervical spine,",
+      "Maxillary sinus,",
+      "Hyoid bone,",
+      "Both A and C"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q133",
+    "lectureId": "rad-l4",
+    "text": "In PA Mandible positioning, the patient should:",
+    "options": [
+      "Face the image receptor- film-",
+      "Keep the back of the head against the IR",
+      "Lie in a true lateral position only",
+      "Face away from the IR"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q134",
+    "lectureId": "rad-l4",
+    "text": "Which parts of the patient's face should touch the film holder in PA Mandible?",
+    "options": [
+      "Chin only",
+      "Nose and forehead",
+      "Both ears",
+      "Occiput only"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q135",
+    "lectureId": "rad-l4",
+    "text": "What is the position of the radiographic baseline in PA Mandible?",
+    "options": [
+      "Vertical",
+      "Horizontal",
+      "30° cranial",
+      "45° caudal"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q136",
+    "lectureId": "rad-l4",
+    "text": "In PA Mandible projection, the central beam is directed to:",
+    "options": [
+      "The midline of the patient",
+      "The external ear only",
+      "The upper lip",
+      "The nasal tip"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q137",
+    "lectureId": "rad-l4",
+    "text": "In PA Mandible projection, the beam is centered at the height of:",
+    "options": [
+      "Nasion",
+      "Mid-ramus of mandible",
+      "Glabella",
+      "Maxillary sinus"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q138",
+    "lectureId": "rad-l4",
+    "text": "the centering point for PA Mandible is:",
+    "options": [
+      "Nasion",
+      "4 cm above EAM",
+      "Midline of patient at height of midline ramus of mandible",
+      "Acanthion"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q139",
+    "lectureId": "rad-l4",
+    "text": "What is the IR size for PA Mandible projection?",
+    "options": [
+      "18 × 24 cm",
+      "24 × 30 cm",
+      "30 × 40 cm",
+      "35 × 43 cm"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q140",
+    "lectureId": "rad-l4",
+    "text": "Which line is perpendicular to IR in Mandible Lateral Oblique projection?",
+    "options": [
+      "OML",
+      "IPL",
+      "MML",
+      "AML"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q141",
+    "lectureId": "rad-l4",
+    "text": "What is the direction of X-ray for Mandible Lateral Oblique projection?",
+    "options": [
+      "Vertical with 30° caudal angulation",
+      "Vertical",
+      "Vertical with 30° cranial angulation",
+      "Horizontal"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q142",
+    "lectureId": "rad-l4",
+    "text": "What is the centering point for Mandible Lateral Oblique projection?",
+    "options": [
+      "5 cm above EAM",
+      "5 cm below the angle of mandible remote from the cassette",
+      "Nasion",
+      "6 cm above Glabella"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q143",
+    "lectureId": "rad-l4",
+    "text": "In Mandible Lateral Oblique projection, the centering point is below the mandibular angle:",
+    "options": [
+      "Nearest to the cassette",
+      "Remote from the cassette",
+      "At the center of the cassette",
+      "Above the cassette"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q144",
+    "lectureId": "rad-l4",
+    "text": "How far below the mandibular angle is the beam centered in Mandible Lateral Oblique projection?",
+    "options": [
+      "1 cm",
+      "2 cm",
+      "4 cm",
+      "5 cm"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q145",
+    "lectureId": "rad-l4",
+    "text": "What is the mAs for Mandible Lateral Oblique projection?",
+    "options": [
+      "8 mAs",
+      "10 mAs",
+      "16 mAs",
+      "25 mAs"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q146",
+    "lectureId": "rad-l4",
+    "text": "What is the IR size for Mandible Lateral Oblique projection?",
+    "options": [
+      "18 × 24 cm",
+      "24 × 30 cm",
+      "30 × 40 cm",
+      "35 × 43 cm"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q147",
+    "lectureId": "rad-l4",
+    "text": "What is the collimation for Mandible Lateral Oblique projection?",
+    "options": [
+      "Outer margins of skull",
+      "Sinus cavities",
+      "Mandible",
+      "Nasal bones only"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q148",
+    "lectureId": "rad-l4",
+    "text": "Which fractures are indications for Mandible Lateral Oblique projection?",
+    "options": [
+      "Ramus fractures",
+      "Body fractures",
+      "Condylar fractures",
+      "All of the above"
+    ],
+    "correct": 3
+  },
+  {
+    "id": "rad-l4-q149",
+    "lectureId": "rad-l4",
+    "text": "What is the best view for condylar head fracture?",
+    "options": [
+      "PA Mandible",
+      "Waters projection",
+      "Nasal Bone Lateral projection",
+      "Caldwell projection"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q150",
+    "lectureId": "rad-l4",
+    "text": "Which pathological conditions are indications for Mandible Lateral Oblique projection?",
+    "options": [
+      "Cysts",
+      "Tumours",
+      "Both A and B",
+      "Neither A nor B"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q151",
+    "lectureId": "rad-l4",
+    "text": "What is the centering point for TMJ Lateral projection?",
+    "options": [
+      "4 cm above EAM",
+      "5 cm above EAM",
+      "5 cm below mandibular angle",
+      "Nasion"
+    ],
+    "correct": 1
+  },
+  {
+    "id": "rad-l4-q152",
+    "lectureId": "rad-l4",
+    "text": "TMJ Lateral projection demonstrates the joint with:",
+    "options": [
+      "Mouth opened only",
+      "Mouth closed only",
+      "Mouth opened and closed",
+      "Mouth opened with 45° cranial angulation"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q153",
+    "lectureId": "rad-l4",
+    "text": "What are the SID and IR size for TMJ Lateral projection?",
+    "options": [
+      "100 cm and 18 × 24 cm",
+      "100 cm and 24 × 30 cm",
+      "150 cm and 18 × 24 cm",
+      "90 cm and 24 × 30 cm"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q154",
+    "lectureId": "rad-l4",
+    "text": "What is the mAs for TMJ Lateral projection?",
+    "options": [
+      "5 mAs",
+      "8 mAs",
+      "16 mAs",
+      "25 mAs"
+    ],
+    "correct": 2
+  },
+  {
+    "id": "rad-l4-q155",
+    "lectureId": "rad-l4",
+    "text": "True or False: PA Mandible projection reduces eye radiation dose compared with AP projection.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q156",
+    "lectureId": "rad-l4",
+    "text": "True or False: In a pure lateral view, both sides of the mandible can superimpose.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 0
+  },
+  {
+    "id": "rad-l4-q157",
+    "lectureId": "rad-l4",
+    "text": "True or False: Mandible Lateral Oblique projection uses 30° caudal angulation.",
+    "options": [
+      "True",
+      "False"
+    ],
+    "correct": 1
+  }
+]

@@ -1,9 +1,9 @@
 {
-  "id": "",
-  "name": "",
-  "platformTitle": "",
-  "author": "",
-  "contentVersion": "1",
+  "id": "radiographic-imaging",
+  "name": "التصوير الشعاعي",
+  "platformTitle": "منصة QDU للاختبار التفاعلي",
+  "author": "مقتدى الكناني",
+  "contentVersion": "radiography-1",
   "enrichmentFiles": [
     "enrichment.json"
   ]

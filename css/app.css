@@ -67,8 +67,6 @@ button { font-family: inherit; }
 .dark-mode .stat-pill { background: #2c3e50; }
 .stat-pill b { display: block; font-size: 1.7rem; }
 .stat-pill span { font-size: .85rem; opacity: .75; }
-.demo-banner { text-align: center; padding: 8px 16px; background: #f59e0b; color: #422006; font-weight: 700; }
-.demo-banner a { color: inherit; }
 .notice { padding: 10px 14px; border-radius: 12px; margin: 10px auto; max-width: 1160px; background: rgba(245,158,11,.2); border: 1px solid #f59e0b; font-size: .9rem; }
 
 /* empty / error */
@@ -133,7 +131,7 @@ button { font-family: inherit; }
 .timer { font-variant-numeric: tabular-nums; }
 
 /* study mode (full screen) */
-.study-mode .header, .study-mode .main-nav, .study-mode .demo-banner { display: none; }
+.study-mode .header, .study-mode .main-nav { display: none; }
 .study-mode .content-wrapper { padding-top: 56px; }
 .study-mode .quiz-container { max-width: 960px; }
 .study-mode .q-text { font-size: 1.5rem; }
@@ -184,7 +182,6 @@ button { font-family: inherit; }
 /* header + top navigation belong to the home page only; quiz/results are distraction-free */
 #app:not([data-page="home"]) .header { display: none; }
 #app[data-page="quiz"] .main-nav, #app[data-page="results"] .main-nav,
-#app[data-page="quiz"] .demo-banner, #app[data-page="results"] .demo-banner,
 #app[data-page="quiz"] #notices, #app[data-page="results"] #notices { display: none; }
 #app:not([data-page="home"]) .content-wrapper { padding-top: 60px; }
 
